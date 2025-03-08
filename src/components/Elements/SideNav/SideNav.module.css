@@ -1,0 +1,127 @@
+.wrap {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  right: 25px;
+  top: 20px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  width: 45px;
+  height: 45px;
+  z-index: 10000;
+}
+
+.burger {
+  display: block;
+  position: relative;
+  background-color: rgb(71, 71, 71);
+  width: 35px;
+  height: 2px;
+  transition: 0.3s ease;
+}
+
+.burger.active {
+  background-color: transparent;
+  transition: 0.3s ease;
+}
+
+.burger::before,
+.burger::after {
+  position: absolute;
+  content: "";
+  background-color: rgb(71, 71, 71);
+  height: 2px;
+  transition: 0.3s ease;
+}
+
+.burger::before {
+  right: 0px;
+  top: -8px;
+  width: 35px;
+}
+
+.burger::after {
+  right: 0px;
+  top: 8px;
+  width: 22px;
+}
+
+.burger.active::before {
+  top: 0px;
+  transform: rotate(45deg);
+}
+
+.burger.active::after {
+  top: 0px;
+  width: 35px;
+  transform: rotate(-45deg);
+}
+
+.navPoints {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 50px;
+}
+
+.navPoints li {
+  width: 30px;
+  height: 2px;
+  background-color: rgba(71, 71, 71, 0.332);
+}
+
+.navPoints li.active {
+  background-color: black; /* Чорний колір для активного пункту */
+}
+.overlay {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  text-align: center;
+  position: fixed;
+  gap: 80px;
+  width: 100vw;
+  height: 100vh;
+  left: 0;
+  right: 0;
+  padding: 50px 5% 5% 5%;
+  background-color: rgba(255, 255, 255, 0.841);
+  z-index: 1000;
+}
+
+.name {
+  font-size: 34px;
+  text-transform: uppercase;
+  font-weight: 300;
+  letter-spacing: 10px;
+}
+
+.subtitle {
+  text-transform: uppercase;
+  color: rgb(71, 71, 71);
+  letter-spacing: 8px;
+}
+
+.navLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.navLinks li {
+  font-size: 32px;
+  text-transform: uppercase;
+  color: rgb(71, 71, 71);
+  letter-spacing: 8px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.navLinks li:hover {
+  text-decoration: line-through;
+}

@@ -1,0 +1,19 @@
+.container {
+  position: relative;
+  display: block;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  height: 100vh;
+  max-width: 1600px;
+  width: 100%;
+  padding: 60px 0px;
+  overflow: hidden;
+}
+
+
+@media screen and (max-width: 1280px) {
+  .container {
+    height: auto;
+  }
+}

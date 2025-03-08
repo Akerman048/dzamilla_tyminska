@@ -1,0 +1,60 @@
+.wrap{
+    display: flex;
+    flex-direction: column;
+    margin: auto auto;
+    max-width: 400px;
+    gap: 20px;
+}
+
+.form{
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.form input{
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    border: none;
+    -webkit-box-shadow: 2px 2px 5px 1px rgba(222,222,222,1);
+-moz-box-shadow: 2px 2px 5px 1px rgba(222,222,222,1);
+box-shadow: 2px 2px 5px 1px rgba(222,222,222,1);
+}
+
+.form button{
+    padding: 5px 10px;
+    border: none;
+    background-color: rgb(151, 151, 151);
+    color: rgb(255, 255, 255);
+    font-size: 19px;
+    cursor: pointer;
+    transition: .3s ease;
+}
+
+.form button:hover{
+    color: rgb(232, 232, 232);
+    background-color: rgb(106, 106, 106);
+}
+
+.googleLogIn{
+    display: flex;
+    gap: 10px;
+    font-size: 16px;
+    align-items: center;
+    border: none;
+    cursor: pointer;
+    max-width: 200px;
+    background-color: rgb(255, 255, 255);
+    -webkit-box-shadow: 2px 2px 5px 1px rgba(222,222,222,1);
+-moz-box-shadow: 2px 2px 5px 1px rgba(222,222,222,1);
+box-shadow: 2px 2px 5px 1px rgba(222,222,222,1);
+}
+
+.googleLogo{
+    font-size: 32px;
+}
+
+.logOut{
+    padding: 10px 20px;
+    font-size: 16px;
+}

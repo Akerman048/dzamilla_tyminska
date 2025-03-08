@@ -1,0 +1,178 @@
+.MainSection {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin: 0 auto;
+  width: 100vw;
+  max-width: 100%;
+  height: 100%;
+  /* overflow-y: hidden; */
+padding: 0px 50px;
+  gap: 30px;
+}
+
+#main-section {
+  width: 100%;
+  height: 100%;
+}
+
+.imgWrap {
+  position: relative;
+  max-width: 700px;
+  width: 100%;
+}
+
+.homeImgWrap {
+  display: block;
+  max-width: 690px;
+  width: 100%;
+}
+
+.homeImgWrap img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.homeSideImgWrap {
+  max-width: 400px;
+  position: absolute;
+  left: 160px;
+  bottom: -100px;
+  width: 100%;
+}
+
+.homeSideImgWrap img {
+  width: 100%;
+}
+
+.homeSmallImgWrap {
+  position: absolute;
+  max-width: 160px;
+  left: -120px;
+  top: -100px;
+}
+
+.homeSmallImgWrap image {
+  width: 100%;
+}
+
+.author {
+  text-align: center;
+}
+
+.name {
+  font-weight: 400;
+  letter-spacing: 8px;
+  text-transform: uppercase;
+  color: rgb(72, 71, 71);
+  max-width: 500px;
+  width: 100%;
+}
+
+.profession {
+  text-transform: uppercase;
+  letter-spacing: 7px;
+  color: rgb(110, 110, 110);
+}
+
+/* TABLET */
+
+@media screen and (max-width: 1200px) {
+  .MainSection {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    max-width: 100%;
+    height: 600px;
+    max-height: 100%;
+    gap: 60px;
+  }
+
+  .imgWrap {
+    margin-left: -100px;
+  }
+
+  .homeSideImgWrap {
+    left: 200px;
+  }
+
+  .homeSmallImgWrap {
+    left: 100px;
+  }
+
+  .name {
+    font-size: 20px;
+    font-weight: 500;
+  }
+}
+
+@media screen and (max-width: 960px) {
+  .MainSection {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    gap: 0px;
+    max-height: 800px;
+    padding: 50px 0px;
+  }
+
+  .author {
+    order: 1;
+  }
+
+  .imgWrap {
+    order: 2;
+    margin: 0;
+  }
+  .name {
+    font-size: 24px;
+    font-weight: 400;
+  }
+
+  .homeSideImgWrap {
+    position: absolute;
+    max-width: 300px;
+    left: -60px;
+    bottom: -160px;
+  }
+
+  .homeSmallImgWrap {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .MainSection {
+    gap: 0px;
+    max-height: 500px;
+  }
+
+  .homeSideImgWrap {
+    max-width: 200px;
+    left: 50px;
+    bottom: -100px;
+  }
+
+  .name {
+    font-size: 18px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .MainSection {
+    gap: 0px;
+    max-height: 500px;
+  }
+
+  .homeSideImgWrap {
+    max-width: 200px;
+    left: 50px;
+    bottom: -100px;
+  }
+
+  .name {
+    font-size: 18px;
+  }
+}
