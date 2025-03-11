@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import s from "./Contacts.module.css";
 import { BlockTitle } from "../Elements/BlockTitle/BlockTitle";
-import { Link } from "react-router-dom";
 import contacts1 from "../../assets/contacts/1.jpg";
 import contacts2 from "../../assets/contacts/2.jpg";
 import contacts3 from "../../assets/contacts/3.jpg";

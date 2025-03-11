@@ -180,7 +180,7 @@ export const Works = () => {
             <div
               key={album.id}
               className={s.albumWrap}
-              onClick={() => navigate(`/album/${album.name}`)}
+              onClick={() => navigate(`album/${album.name}`)}
             >
               <img
                 onMouseMove={(e) => handleImageMouseMove(e, album.cover)}

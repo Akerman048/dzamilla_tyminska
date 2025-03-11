@@ -7,7 +7,7 @@ import {
 } from "../../config/auth";
 import { useAuth } from "../../contexts/authContext";
 import { Navigate, useNavigate } from "react-router-dom";
-import s from "./Auth.module.css"
+import s from "./Auth.module.css";
 import { FcGoogle } from "react-icons/fc";
 export const Auth = () => {
   const { userLoggedIn } = useAuth();
@@ -70,10 +70,16 @@ export const Auth = () => {
           </button>
         </form>
 
-        <button className={s.googleLogIn} onClick={onGoogleSignIn} disabled={isSigningIn}>
-        <FcGoogle className={s.googleLogo} /> Log in with Google
+        <button
+          className={s.googleLogIn}
+          onClick={onGoogleSignIn}
+          disabled={isSigningIn}
+        >
+          <FcGoogle className={s.googleLogo} /> Log in with Google
         </button>
-        <button className={s.logOut} onClick={onLogout}>Log out</button>
+        <button className={s.logOut} onClick={onLogout}>
+          Log out
+        </button>
         {}
         {!userLoggedIn && <p>You are not authorized</p>}
 

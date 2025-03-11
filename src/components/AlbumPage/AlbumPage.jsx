@@ -23,7 +23,7 @@ import { SideNav } from "../Elements/SideNav/SideNav";
 import { useAuth } from "../../contexts/authContext";
 
 export const AlbumPage = () => {
-  const {userLoggedIn} = useAuth();
+  const { userLoggedIn } = useAuth();
   const { albumName } = useParams();
   const navigate = useNavigate();
   const [imageUpload, setImageUpload] = useState(null);
@@ -76,7 +76,7 @@ export const AlbumPage = () => {
       return;
     }
 
-    const imageRef = ref(storage, `albums/${albumName}/${imageUpload.name}`);
+    const imageRef = ref(storage, `/dzamilla_tyminska/albums/${albumName}/${imageUpload.name}`);
     const snapshot = await uploadBytes(imageRef, imageUpload);
     const url = await getDownloadURL(snapshot.ref);
 
@@ -105,23 +105,28 @@ export const AlbumPage = () => {
 
   const handleDelete = async (e, photoUrl) => {
     e.stopPropagation();
-    
+
     try {
       // Отримуємо фото з Firestore, щоб знайти його `id`
-      const photosQuery = query(photosCollectionRef, where("url", "==", photoUrl));
+      const photosQuery = query(
+        photosCollectionRef,
+        where("url", "==", photoUrl)
+      );
       const photosSnapshot = await getDocs(photosQuery);
-  
+
       if (!photosSnapshot.empty) {
         const photoDoc = photosSnapshot.docs[0];
         await deleteDoc(doc(db, "photos", photoDoc.id)); // Видаляємо фото з Firestore
       }
-  
+
       // Видаляємо фото з Firebase Storage
       const imageRef = ref(storage, photoUrl);
       await deleteObject(imageRef);
-  
+
       // Оновлюємо стан, щоб прибрати фото з UI
-      setPhotos((prevPhotos) => prevPhotos.filter((photo) => photo.url !== photoUrl));
+      setPhotos((prevPhotos) =>
+        prevPhotos.filter((photo) => photo.url !== photoUrl)
+      );
     } catch (error) {
       console.error("Error deleting photo:", error);
       alert("Could not delete photo. Please try again..");
@@ -130,7 +135,7 @@ export const AlbumPage = () => {
 
   return (
     <>
-    {/* <SideNav sideLines={false}/> */}
+      {/* <SideNav sideLines={false}/> */}
       <div className={s.nav}>
         <h2 className={s.name}>Dżamilla Tymińska</h2>{" "}
         <button className={s.homebutton} onClick={() => navigate("/")}>
@@ -151,13 +156,15 @@ export const AlbumPage = () => {
         </button>
         <h2 className={s.albumName}>{albumName}</h2>
 
-        {(userLoggedIn && <div className={s.uploadWrap}>
-          <input
-            type='file'
-            onChange={(e) => setImageUpload(e.target.files[0])}
-          />
-          <button onClick={uploadPhoto}>Add Photo</button>
-        </div>)}
+        {userLoggedIn && (
+          <div className={s.uploadWrap}>
+            <input
+              type='file'
+              onChange={(e) => setImageUpload(e.target.files[0])}
+            />
+            <button onClick={uploadPhoto}>Add Photo</button>
+          </div>
+        )}
 
         <div className={s.masonryGrid}>
           {columns.map((column, colIndex) => (
@@ -165,13 +172,18 @@ export const AlbumPage = () => {
               {column.map((photo) => (
                 <div key={photo.url} className={s.photoContainer}>
                   <img className={s.image} src={photo.url} alt='Photo' />
-                  {userLoggedIn && (<button
-                    className={s.setMainButton}
-                    onClick={() => changeMainPhoto(photo.url)}
+                  {userLoggedIn && (
+                    <button
+                      className={s.setMainButton}
+                      onClick={() => changeMainPhoto(photo.url)}
+                    >
+                      Set as main photo
+                    </button>
+                  )}
+                  <button
+                    onClick={(e) => handleDelete(e, photo.url)}
+                    className={s.delete}
                   >
-                    Set as main photo
-                  </button>)}
-                  <button onClick={(e) => handleDelete(e, photo.url)} className={s.delete}>
                     <MdClose />
                   </button>
                 </div>
