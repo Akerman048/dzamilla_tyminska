@@ -51,7 +51,7 @@ export const Contacts = () => {
   return (
     <div className={s.wrap}>
       <div className={s.img1}>
-        <img alt="contact side photo 1"
+        <img alt="contact side 1"
           src={contacts1}
           onMouseMove={(e) => handleImageMouseMove(e, "1")}
           onMouseLeave={handleImageMouseLeave}
@@ -65,7 +65,7 @@ export const Contacts = () => {
         />
       </div>
       <div className={s.img2}>
-        <img alt="contact side photo 2"
+        <img alt="contact side 2"
           src={contacts2}
           onMouseMove={(e) => handleImageMouseMove(e, "2")}
           onMouseLeave={handleImageMouseLeave}
@@ -79,7 +79,7 @@ export const Contacts = () => {
         />
       </div>
       <div className={s.img3}>
-        <img alt="contact side photo 3"
+        <img alt="contact side 3"
           src={contacts3}
           onMouseMove={(e) => handleImageMouseMove(e, "3")}
           onMouseLeave={handleImageMouseLeave}

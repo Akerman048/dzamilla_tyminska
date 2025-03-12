@@ -13,7 +13,7 @@ import {
   addDoc,
   getDocs,
   doc,
-  updateDoc,
+  // updateDoc,
   deleteDoc,
 } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
@@ -29,7 +29,7 @@ export const Works = () => {
   const [albums, setAlbums] = useState([]);
   const navigate = useNavigate();
   const gridRef = useRef(null);
-  const [gridWidth, setGridWidth] = useState(0);
+  // const [gridWidth, setGridWidth] = useState(0);
   const [albumCount, setAlbumCount] = useState(0);
   const [rotate, setRotate] = useState({ x: 0, y: 0, scale: 1 });
   const [activeImage, setActiveImage] = useState(null);
@@ -64,7 +64,7 @@ export const Works = () => {
     };
 
     fetchAlbums();
-  }, [albums]);
+  }, [albums, albumsCollectionRef]);
 
   // Завантаження нового альбому
   const uploadImage = async () => {

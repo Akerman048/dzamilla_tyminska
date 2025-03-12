@@ -2,11 +2,10 @@ import React, { useState } from "react";
 import {
   doSignInWithEmailAndPassword,
   doSignInWithGoogle,
-  doCreateUserWithEmailAndPassword,
   doSignOut,
 } from "../../config/auth";
 import { useAuth } from "../../contexts/authContext";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import s from "./Auth.module.css";
 import { FcGoogle } from "react-icons/fc";
 export const Auth = () => {

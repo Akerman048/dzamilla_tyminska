@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import s from "./SideNav.module.css";
-import { FiAlignRight } from "react-icons/fi";
 
 export const SideNav = ({ activeSection, sideLines }) => {
   const [isOpen, setIsOpen] = useState(false);

@@ -17,7 +17,7 @@ export const Home = () => {
     const container = scrollRef.current;
     if (!container) return;
   
-    const containerWidth = container.offsetWidth;
+    // const containerWidth = container.offsetWidth;
   
     if (window.innerWidth > 1280) {
       event.preventDefault(); // Блокуємо стандартний скрол тільки для великих екранів

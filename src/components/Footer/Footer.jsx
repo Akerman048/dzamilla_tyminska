@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 
 import s from "./Footer.module.css";
 
-import { FaFacebookF } from "react-icons/fa";
-import { FaInstagram } from "react-icons/fa";
-import { FaBehance } from "react-icons/fa";
+// import { FaFacebookF } from "react-icons/fa";
+// import { FaInstagram } from "react-icons/fa";
+// import { FaBehance } from "react-icons/fa";
 
 export const Footer = () => {
   return (

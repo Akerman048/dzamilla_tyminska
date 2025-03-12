@@ -19,7 +19,6 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import { MdClose } from "react-icons/md";
-import { SideNav } from "../Elements/SideNav/SideNav";
 import { useAuth } from "../../contexts/authContext";
 
 export const AlbumPage = () => {
@@ -69,7 +68,6 @@ export const AlbumPage = () => {
     fetchAlbumData();
   }, [albumName]);
 
-  // Завантаження фото
   const uploadPhoto = async () => {
     if (!imageUpload) {
       alert("Select file!");
@@ -171,7 +169,7 @@ export const AlbumPage = () => {
             <div key={colIndex} className={s.column}>
               {column.map((photo) => (
                 <div key={photo.url} className={s.photoContainer}>
-                  <img className={s.image} src={photo.url} alt='Photo' />
+                  <img className={s.image} src={photo.url} alt='photoContainer' />
                   {userLoggedIn && (
                     <button
                       className={s.setMainButton}
