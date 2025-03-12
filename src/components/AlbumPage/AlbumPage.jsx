@@ -66,7 +66,7 @@ export const AlbumPage = () => {
     };
 
     fetchAlbumData();
-  }, [albumName, albumsCollectionRef]);
+  }, [albumName, albumsCollectionRef, photosCollectionRef]);
 
   const uploadPhoto = async () => {
     if (!imageUpload) {
