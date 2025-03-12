@@ -29,7 +29,7 @@ export const Works = () => {
   const [albums, setAlbums] = useState([]);
   const navigate = useNavigate();
   const gridRef = useRef(null);
-  // const [gridWidth, setGridWidth] = useState(0);
+  const [gridWidth, setGridWidth] = useState(0);
   const [albumCount, setAlbumCount] = useState(0);
   const [rotate, setRotate] = useState({ x: 0, y: 0, scale: 1 });
   const [activeImage, setActiveImage] = useState(null);
@@ -37,21 +37,20 @@ export const Works = () => {
   const albumsCollectionRef = collection(db, "albums");
 
   useEffect(() => {
-    // if (gridRef.current) {
-    //   setGridWidth(gridRef.current.getBoundingClientRect().width);
-    // }
+    if (gridRef.current) {
+      setGridWidth(gridRef.current.getBoundingClientRect().width);
+    }
 
-    // const handleResize = () => {
-    //   if (gridRef.current) {
-    //     setGridWidth(gridRef.current.getBoundingClientRect().width);
-    //   }
-    // };
+    const handleResize = () => {
+      if (gridRef.current) {
+        setGridWidth(gridRef.current.getBoundingClientRect().width);
+      }
+    };
 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [gridWidth]);
 
-  // Завантаження списку альбомів
   useEffect(() => {
     const fetchAlbums = async () => {
       const snapshot = await getDocs(albumsCollectionRef);
@@ -66,7 +65,6 @@ export const Works = () => {
     fetchAlbums();
   }, [albums, albumsCollectionRef]);
 
-  // Завантаження нового альбому
   const uploadImage = async () => {
     if (!imageUpload || !albumName) {
       alert("Виберіть файл і введіть назву альбому!");
@@ -95,13 +93,10 @@ export const Works = () => {
     const albumRef = doc(db, "albums", album.id);
     const imageRef = ref(storage, album.cover);
     try {
-      // Видаляємо документ альбому з Firestore
       await deleteDoc(albumRef);
 
-      // Видаляємо зображення альбому зі Storage
       await deleteObject(imageRef);
 
-      // Оновлюємо стан, щоб прибрати альбом з UI
       setAlbums((prevAlbums) => prevAlbums.filter((a) => a.id !== album.id));
     } catch (error) {
       console.error("Помилка при видаленні альбому:", error);
@@ -109,7 +104,6 @@ export const Works = () => {
     }
   };
 
-  // Функція для прокрутки вліво
   const handleClickLeft = () => {
     if (gridRef.current) {
       const itemWidth =
@@ -119,7 +113,6 @@ export const Works = () => {
     }
   };
 
-  // Функція для прокрутки вправо
   const handleClickRight = () => {
     if (gridRef.current) {
       const itemWidth =
