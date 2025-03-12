@@ -53,7 +53,7 @@ export const MainSection = () => {
     <div id="main" className={s.MainSection}>
       <div className={s.imgWrap}>
         <div className={s.homeImgWrap}>
-        <img className={s.homeImg}
+        <img alt="main photo" className={s.homeImg}
           onMouseMove={(e) => handleImageMouseMove(e, "main")}
           onMouseLeave={handleImageMouseLeave}
           style={{
@@ -67,7 +67,7 @@ export const MainSection = () => {
           src={homeImg}
         /></div>
         <div className={s.homeSideImgWrap}>
-        <img
+        <img alt="main side photo"
           onMouseMove={(e) => handleImageMouseMove(e, "side")}
           onMouseLeave={handleImageMouseLeave}
           style={{
@@ -82,7 +82,7 @@ export const MainSection = () => {
           src={homeSideImg}
         /></div>
         <div className={s.homeSmallImgWrap}>
-        <img
+        <img alt="main small photo"
           onMouseMove={(e) => handleImageMouseMove(e, "small")}
           onMouseLeave={handleImageMouseLeave}
           style={{

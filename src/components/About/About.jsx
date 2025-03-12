@@ -51,7 +51,7 @@ export const About = () => {
   return (
     <div className={s.container}>
       <div className={s.img1}>
-        <img
+        <img alt="about side photo 1"
           src={about1}
           onMouseMove={(e) => handleImageMouseMove(e, "1")}
           onMouseLeave={handleImageMouseLeave}
@@ -65,7 +65,7 @@ export const About = () => {
         />
       </div>
       <div className={s.img2}>
-        <img
+        <img alt="about side photo 2"
           src={about2}
           onMouseMove={(e) => handleImageMouseMove(e, "2")}
           onMouseLeave={handleImageMouseLeave}
@@ -79,7 +79,7 @@ export const About = () => {
         />
       </div>
       <div className={s.img3}>
-        <img
+        <img alt="about side photo 3"
           src={about3}
           onMouseMove={(e) => handleImageMouseMove(e, "3")}
           onMouseLeave={handleImageMouseLeave}
@@ -113,7 +113,7 @@ export const About = () => {
           </p>
         </div>
         <div className={s.img}>
-          <img src={about3} />
+          <img alt="about photo" src={about3} />
         </div>
       </div>
     </div>
