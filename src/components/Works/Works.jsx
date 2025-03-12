@@ -37,15 +37,15 @@ export const Works = () => {
   const albumsCollectionRef = collection(db, "albums");
 
   useEffect(() => {
-    if (gridRef.current) {
-      setGridWidth(gridRef.current.getBoundingClientRect().width);
-    }
+    // if (gridRef.current) {
+    //   setGridWidth(gridRef.current.getBoundingClientRect().width);
+    // }
 
-    const handleResize = () => {
-      if (gridRef.current) {
-        setGridWidth(gridRef.current.getBoundingClientRect().width);
-      }
-    };
+    // const handleResize = () => {
+    //   if (gridRef.current) {
+    //     setGridWidth(gridRef.current.getBoundingClientRect().width);
+    //   }
+    // };
 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
