@@ -66,7 +66,7 @@ export const AlbumPage = () => {
     };
 
     fetchAlbumData();
-  }, [albumName]);
+  }, [albumName, albumsCollectionRef]);
 
   const uploadPhoto = async () => {
     if (!imageUpload) {
@@ -74,7 +74,10 @@ export const AlbumPage = () => {
       return;
     }
 
-    const imageRef = ref(storage, `/dzamilla_tyminska/albums/${albumName}/${imageUpload.name}`);
+    const imageRef = ref(
+      storage,
+      `/dzamilla_tyminska/albums/${albumName}/${imageUpload.name}`
+    );
     const snapshot = await uploadBytes(imageRef, imageUpload);
     const url = await getDownloadURL(snapshot.ref);
 
@@ -169,7 +172,11 @@ export const AlbumPage = () => {
             <div key={colIndex} className={s.column}>
               {column.map((photo) => (
                 <div key={photo.url} className={s.photoContainer}>
-                  <img className={s.image} src={photo.url} alt='photoContainer' />
+                  <img
+                    className={s.image}
+                    src={photo.url}
+                    alt='photoContainer'
+                  />
                   {userLoggedIn && (
                     <button
                       className={s.setMainButton}
