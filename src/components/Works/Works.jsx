@@ -53,56 +53,83 @@ export const Works = () => {
 
   useEffect(() => {
     const fetchAlbums = async () => {
+      // Перевіряємо, чи вже є альбоми в локальному сховищі
+      const cachedAlbums = localStorage.getItem("albums");
+      if (cachedAlbums) {
+        setAlbums(JSON.parse(cachedAlbums));
+        setAlbumCount(JSON.parse(cachedAlbums).length);
+        return;
+      }
+  
+      // Якщо в localStorage нічого немає — виконуємо запит до Firestore
       const snapshot = await getDocs(albumsCollectionRef);
-      setAlbumCount(snapshot.size);
       const albumsData = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
+  
       setAlbums(albumsData);
+      setAlbumCount(albumsData.length);
+  
+      // Зберігаємо в локальному сховищі
+      localStorage.setItem("albums", JSON.stringify(albumsData));
     };
-
-    fetchAlbums();
-  }, [albums, albumsCollectionRef]);
+  
+    // Виконуємо запит тільки якщо стан ще не заповнений
+    if (albums.length === 0) {
+      fetchAlbums();
+    }
+  }, []);
+  
 
   const uploadImage = async () => {
     if (!imageUpload || !albumName) {
       alert("Виберіть файл і введіть назву альбому!");
       return;
     }
-
+  
     const imageRef = ref(storage, `albums/${albumName}/${imageUpload.name}`);
     const snapshot = await uploadBytes(imageRef, imageUpload);
     const url = await getDownloadURL(snapshot.ref);
-
+  
     const newAlbumRef = await addDoc(albumsCollectionRef, {
       name: albumName,
       cover: url,
     });
-    setAlbums((prev) => [
-      ...prev,
-      { id: newAlbumRef.id, name: albumName, cover: url },
-    ]);
+  
+    const newAlbum = { id: newAlbumRef.id, name: albumName, cover: url };
+  
+    const updatedAlbums = [...albums, newAlbum];
+    setAlbums(updatedAlbums);
     setAlbumName("");
     setImageUpload(null);
+  
+    // Оновлюємо localStorage після додавання
+    localStorage.setItem("albums", JSON.stringify(updatedAlbums));
   };
+  
 
   const handleDelete = async (e, album) => {
     e.stopPropagation();
-
+  
     const albumRef = doc(db, "albums", album.id);
     const imageRef = ref(storage, album.cover);
+  
     try {
       await deleteDoc(albumRef);
-
       await deleteObject(imageRef);
-
-      setAlbums((prevAlbums) => prevAlbums.filter((a) => a.id !== album.id));
+  
+      const updatedAlbums = albums.filter((a) => a.id !== album.id);
+      setAlbums(updatedAlbums);
+  
+      // Оновлюємо localStorage після видалення
+      localStorage.setItem("albums", JSON.stringify(updatedAlbums));
     } catch (error) {
       console.error("Помилка при видаленні альбому:", error);
       alert("Не вдалося видалити альбом. Спробуйте ще раз.");
     }
   };
+  
 
   const handleClickLeft = () => {
     if (gridRef.current) {
