@@ -79,7 +79,7 @@ export const Works = () => {
     if (albums.length === 0) {
       fetchAlbums();
     }
-  }, []);
+  }, [albums.length, albumsCollectionRef]);
   
 
   const uploadImage = async () => {
