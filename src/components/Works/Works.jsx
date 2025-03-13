@@ -33,6 +33,8 @@ export const Works = () => {
   const [albumCount, setAlbumCount] = useState(0);
   const [rotate, setRotate] = useState({ x: 0, y: 0, scale: 1 });
   const [activeImage, setActiveImage] = useState(null);
+  const [loading, setLoading] = useState(true);
+
 
   const albumsCollectionRef = collection(db, "albums");
 
@@ -53,15 +55,14 @@ export const Works = () => {
 
   useEffect(() => {
     const fetchAlbums = async () => {
-      // Перевіряємо, чи вже є альбоми в локальному сховищі
       const cachedAlbums = localStorage.getItem("albums");
       if (cachedAlbums) {
         setAlbums(JSON.parse(cachedAlbums));
         setAlbumCount(JSON.parse(cachedAlbums).length);
+        setLoading(false); // ✅ Завантаження завершено
         return;
       }
   
-      // Якщо в localStorage нічого немає — виконуємо запит до Firestore
       const snapshot = await getDocs(albumsCollectionRef);
       const albumsData = snapshot.docs.map((doc) => ({
         id: doc.id,
@@ -71,15 +72,15 @@ export const Works = () => {
       setAlbums(albumsData);
       setAlbumCount(albumsData.length);
   
-      // Зберігаємо в локальному сховищі
       localStorage.setItem("albums", JSON.stringify(albumsData));
+      setLoading(false); // ✅ Завантаження завершено
     };
   
-    // Виконуємо запит тільки якщо стан ще не заповнений
     if (albums.length === 0) {
       fetchAlbums();
     }
   }, [albums.length, albumsCollectionRef]);
+  
   
 
   const uploadImage = async () => {
@@ -199,47 +200,49 @@ export const Works = () => {
             <IoIosArrowBack onClick={handleClickLeft} className={s.leftArrow} />
           )}
           <div className={s.grid} ref={gridRef}>
-            {albums.map((album) => (
-              <div
-                key={album.id}
-                className={s.albumWrap}
-                onClick={() => navigate(`album/${album.name}`)}
-              >
-                <img
-                  onMouseMove={(e) => handleImageMouseMove(e, album.cover)}
-                  onMouseLeave={handleImageMouseLeave}
-                  className={s.image}
-                  src={album.cover}
-                  alt={album.name}
-                  style={{
-                    transform: `${
-                      activeImage === album.cover && window.innerWidth > 960
-                        ? `perspective(1000px) rotateX(${-rotate.x}deg) rotateY(${-rotate.y}deg)`
-                        : `perspective(1000px) `
-                    }`,
-                    transition: "transform 0.1s ease-out",
-                  }}
-                />
-                <span className={s.title}>{album.name}</span>
-                {userLoggedIn && (
-                  <button
-                    style={{
-                      transform: `${
-                        activeImage === album.cover && window.innerWidth > 960
-                          ? `perspective(1000px) rotateX(20deg) rotateY(${-rotate.y}deg)`
-                          : `perspective(1000px) `
-                      }`,
-                      transition: "transform 0.1s ease-out",
-                    }}
-                    onClick={(e) => handleDelete(e, album)}
-                    className={s.deleteAlbum}
-                  >
-                    <MdClose />
-                  </button>
-                )}
-              </div>
-            ))}
-          </div>
+  {loading ? (
+    // Показуємо 4 заглушки для заповнення сітки
+    [...Array(4)].map((_, index) => (
+      <div key={index} className={s.albumWrap}>
+        <div className={s.skeleton}></div>
+      </div>
+    ))
+  ) : (
+    albums.map((album) => (
+      <div
+        key={album.id}
+        className={s.albumWrap}
+        onClick={() => navigate(`album/${album.name}`)}
+      >
+        <img
+          onMouseMove={(e) => handleImageMouseMove(e, album.cover)}
+          onMouseLeave={handleImageMouseLeave}
+          className={s.image}
+          src={album.cover}
+          alt={album.name}
+          style={{
+            transform: `${
+              activeImage === album.cover && window.innerWidth > 960
+                ? `perspective(1000px) rotateX(${-rotate.x}deg) rotateY(${-rotate.y}deg)`
+                : `perspective(1000px)`
+            }`,
+            transition: "transform 0.1s ease-out",
+          }}
+        />
+        <span className={s.title}>{album.name}</span>
+        {userLoggedIn && (
+          <button
+            className={s.deleteAlbum}
+            onClick={(e) => handleDelete(e, album)}
+          >
+            <MdClose />
+          </button>
+        )}
+      </div>
+    ))
+  )}
+</div>
+
           {albumCount > 6 && window.innerWidth > 901 && (
             <IoIosArrowForward
               onClick={handleClickRight}
