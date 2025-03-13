@@ -185,12 +185,12 @@ export const AlbumPage = () => {
                       Set as main photo
                     </button>
                   )}
-                  <button
+                  {userLoggedIn && (<button
                     onClick={(e) => handleDelete(e, photo.url)}
                     className={s.delete}
                   >
                     <MdClose />
-                  </button>
+                  </button>)}
                 </div>
               ))}
             </div>

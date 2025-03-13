@@ -23,7 +23,7 @@ import { MdClose } from "react-icons/md";
 import { useAuth } from "../../contexts/authContext";
 
 export const Works = () => {
-  const {userLoggedIn} = useAuth();
+  const { userLoggedIn } = useAuth();
   const [albumName, setAlbumName] = useState("");
   const [imageUpload, setImageUpload] = useState(null);
   const [albums, setAlbums] = useState([]);
@@ -145,76 +145,82 @@ export const Works = () => {
   };
 
   return (
-    <><BlockTitle title='Works' /><div  className={s.wrapper}>
-      
-      {userLoggedIn && (<div className={s.uploadWrap}>
-        <input
-          className={s.inputFile}
-          type='file'
-          onChange={(e) => setImageUpload(e.target.files[0])}
-        />
-        <input
-          className={s.inputTitle}
-          type='text'
-          placeholder='Enter album name'
-          value={albumName}
-          onChange={(e) => setAlbumName(e.target.value)}
-        />
-        <button className={s.createAlbum} onClick={uploadImage}>
-          Create Album
-        </button>
-      </div>)}
-      <div className={s.galleryWrap}>
-        {albumCount > 6 && window.innerWidth > 901 &&(
-          <IoIosArrowBack onClick={handleClickLeft} className={s.leftArrow} />
+    <>
+      <BlockTitle title='Works' />
+      <div className={s.wrapper}>
+        {userLoggedIn && (
+          <div className={s.uploadWrap}>
+            <input
+              className={s.inputFile}
+              type='file'
+              onChange={(e) => setImageUpload(e.target.files[0])}
+            />
+            <input
+              className={s.inputTitle}
+              type='text'
+              placeholder='Enter album name'
+              value={albumName}
+              onChange={(e) => setAlbumName(e.target.value)}
+            />
+            <button className={s.createAlbum} onClick={uploadImage}>
+              Create Album
+            </button>
+          </div>
         )}
-        <div className={s.grid} ref={gridRef}>
-          {albums.map((album) => (
-            <div
-              key={album.id}
-              className={s.albumWrap}
-              onClick={() => navigate(`album/${album.name}`)}
-            >
-              <img
-                onMouseMove={(e) => handleImageMouseMove(e, album.cover)}
-                onMouseLeave={handleImageMouseLeave}
-                className={s.image}
-                src={album.cover}
-                alt={album.name}
-                style={{
-                  transform: `${
-                    activeImage === album.cover && window.innerWidth > 960
-                      ? `perspective(1000px) rotateX(${-rotate.x}deg) rotateY(${-rotate.y}deg)`
-                      : `perspective(1000px) `
-                  }`,
-                  transition: "transform 0.1s ease-out",
-                }}
-              />
-              <span className={s.title}>{album.name}</span>
-             {userLoggedIn && ( <button
-                style={{
-                  transform: `${
-                    activeImage === album.cover && window.innerWidth > 960
-                      ? `perspective(1000px) rotateX(20deg) rotateY(${-rotate.y}deg)`
-                      : `perspective(1000px) `
-                  }`,
-                  transition: "transform 0.1s ease-out",
-                }}
-                onClick={(e) => handleDelete(e, album)}
-                className={s.deleteAlbum}
+        <div className={s.galleryWrap}>
+          {albumCount > 6 && window.innerWidth > 901 && (
+            <IoIosArrowBack onClick={handleClickLeft} className={s.leftArrow} />
+          )}
+          <div className={s.grid} ref={gridRef}>
+            {albums.map((album) => (
+              <div
+                key={album.id}
+                className={s.albumWrap}
+                onClick={() => navigate(`album/${album.name}`)}
               >
-                <MdClose />
-              </button>)}
-            </div>
-          ))}
+                <img
+                  onMouseMove={(e) => handleImageMouseMove(e, album.cover)}
+                  onMouseLeave={handleImageMouseLeave}
+                  className={s.image}
+                  src={album.cover}
+                  alt={album.name}
+                  style={{
+                    transform: `${
+                      activeImage === album.cover && window.innerWidth > 960
+                        ? `perspective(1000px) rotateX(${-rotate.x}deg) rotateY(${-rotate.y}deg)`
+                        : `perspective(1000px) `
+                    }`,
+                    transition: "transform 0.1s ease-out",
+                  }}
+                />
+                <span className={s.title}>{album.name}</span>
+                {userLoggedIn && (
+                  <button
+                    style={{
+                      transform: `${
+                        activeImage === album.cover && window.innerWidth > 960
+                          ? `perspective(1000px) rotateX(20deg) rotateY(${-rotate.y}deg)`
+                          : `perspective(1000px) `
+                      }`,
+                      transition: "transform 0.1s ease-out",
+                    }}
+                    onClick={(e) => handleDelete(e, album)}
+                    className={s.deleteAlbum}
+                  >
+                    <MdClose />
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+          {albumCount > 6 && window.innerWidth > 901 && (
+            <IoIosArrowForward
+              onClick={handleClickRight}
+              className={s.rightArrow}
+            />
+          )}
         </div>
-        {albumCount > 6 && window.innerWidth > 901 &&(
-          <IoIosArrowForward
-            onClick={handleClickRight}
-            className={s.rightArrow}
-          />
-        )}
       </div>
-    </div>
-  </>);
+    </>
+  );
 };
