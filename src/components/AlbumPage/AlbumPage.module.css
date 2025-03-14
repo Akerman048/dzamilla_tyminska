@@ -38,10 +38,16 @@ position: relative;
 }
 
 .backButton {
+  display: flex;
   background-color: #ddd;
   padding: 10px;
   border: none;
   cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #4b4a4a;
+  font-weight: 500;
 }
 
 .albumName{

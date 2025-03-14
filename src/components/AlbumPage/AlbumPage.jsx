@@ -20,6 +20,7 @@ import {
 } from "firebase/firestore";
 import { MdClose } from "react-icons/md";
 import { useAuth } from "../../contexts/authContext";
+import { FaLongArrowAltLeft } from "react-icons/fa";
 
 export const AlbumPage = () => {
   const { userLoggedIn } = useAuth();
@@ -153,7 +154,8 @@ export const AlbumPage = () => {
 
       <div className={s.albumWrapper}>
         <button className={s.backButton} onClick={() => navigate("/")}>
-          ⬅ Back to Albums
+          <FaLongArrowAltLeft />
+          Back to Albums
         </button>
         <h2 className={s.albumName}>{albumName}</h2>
 
@@ -185,12 +187,14 @@ export const AlbumPage = () => {
                       Set as main photo
                     </button>
                   )}
-                  {userLoggedIn && (<button
-                    onClick={(e) => handleDelete(e, photo.url)}
-                    className={s.delete}
-                  >
-                    <MdClose />
-                  </button>)}
+                  {userLoggedIn && (
+                    <button
+                      onClick={(e) => handleDelete(e, photo.url)}
+                      className={s.delete}
+                    >
+                      <MdClose />
+                    </button>
+                  )}
                 </div>
               ))}
             </div>
