@@ -46,8 +46,6 @@
   overflow-x: auto;
   white-space: nowrap;
   max-width: 1200px;
-  min-width: 300px;
-
 }
 
 .grid::-webkit-scrollbar {
@@ -229,7 +227,7 @@
 } */
 
 @media screen and (max-width: 700px) {
-  .grid {
+  /* .grid {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -237,9 +235,7 @@
     max-width: 100vw;
     width: 100%;
     overflow-x: auto;
-    min-height: 200px;
-    height: 100%;
-  }
+  } */
 
   .albumWrap {
     max-width: 180px;
@@ -265,7 +261,6 @@
     max-width: 100vw;
     width: 100%;
     overflow-x: hidden;
-    height: auto;
   }
 
   .albumWrap {
@@ -280,25 +275,5 @@
     width: 100%;
     max-height: 230px;
     height: 100%;
-  }
-}
-
-.skeleton {
-  width: 100%;
-  height: 260px;
-  background-color: #e0e0e0;
-  border-radius: 8px;
-  animation: skeleton-loading 1.5s infinite ease-in-out;
-}
-
-@keyframes skeleton-loading {
-  0% {
-    background-color: #e0e0e0;
-  }
-  50% {
-    background-color: #d6d6d6;
-  }
-  100% {
-    background-color: #e0e0e0;
   }
 }
