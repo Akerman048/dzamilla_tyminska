@@ -13,6 +13,7 @@ import {
   addDoc,
   getDocs,
   doc,
+  // updateDoc,
   deleteDoc,
 } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
@@ -30,49 +31,85 @@ export const Works = () => {
   const gridRef = useRef(null);
   const [gridWidth, setGridWidth] = useState(0);
   const [albumCount, setAlbumCount] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [gridReady, setGridReady] = useState(false);
+  const [rotate, setRotate] = useState({ x: 0, y: 0, scale: 1 });
+  const [activeImage, setActiveImage] = useState(null);
 
   const albumsCollectionRef = collection(db, "albums");
 
   useEffect(() => {
-    const fetchAlbums = async () => {
-      const cachedAlbums = localStorage.getItem("albums");
-      if (cachedAlbums) {
-        setAlbums(JSON.parse(cachedAlbums));
-        setAlbumCount(JSON.parse(cachedAlbums).length);
-        setLoading(false);
-        return;
-      }
+    if (gridRef.current) {
+      setGridWidth(gridRef.current.getBoundingClientRect().width);
+    }
 
+    const handleResize = () => {
+      if (gridRef.current) {
+        setGridWidth(gridRef.current.getBoundingClientRect().width);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [gridWidth]);
+
+  useEffect(() => {
+    const fetchAlbums = async () => {
       const snapshot = await getDocs(albumsCollectionRef);
+      setAlbumCount(snapshot.size);
       const albumsData = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
-
       setAlbums(albumsData);
-      setAlbumCount(albumsData.length);
-      localStorage.setItem("albums", JSON.stringify(albumsData));
-      setLoading(false);
     };
 
     fetchAlbums();
-  }, [albumsCollectionRef]);
+  }, [albums, albumsCollectionRef]);
 
-  // ✅ Визначаємо ширину сітки після завантаження альбомів
-  useEffect(() => {
-    if (gridRef.current && albums.length > 0) {
-      setGridWidth(gridRef.current.getBoundingClientRect().width);
-      setGridReady(true); // ✅ Оновлюємо стан тільки коли сітка готова
+  const uploadImage = async () => {
+    if (!imageUpload || !albumName) {
+      alert("Виберіть файл і введіть назву альбому!");
+      return;
     }
-  }, [albums]); // Оновлюємо при зміні стану `albums`
+
+    const imageRef = ref(storage, `albums/${albumName}/${imageUpload.name}`);
+    const snapshot = await uploadBytes(imageRef, imageUpload);
+    const url = await getDownloadURL(snapshot.ref);
+
+    const newAlbumRef = await addDoc(albumsCollectionRef, {
+      name: albumName,
+      cover: url,
+    });
+    setAlbums((prev) => [
+      ...prev,
+      { id: newAlbumRef.id, name: albumName, cover: url },
+    ]);
+    setAlbumName("");
+    setImageUpload(null);
+  };
+
+  const handleDelete = async (e, album) => {
+    e.stopPropagation();
+
+    const albumRef = doc(db, "albums", album.id);
+    const imageRef = ref(storage, album.cover);
+    try {
+      await deleteDoc(albumRef);
+
+      await deleteObject(imageRef);
+
+      setAlbums((prevAlbums) => prevAlbums.filter((a) => a.id !== album.id));
+    } catch (error) {
+      console.error("Помилка при видаленні альбому:", error);
+      alert("Не вдалося видалити альбом. Спробуйте ще раз.");
+    }
+  };
 
   const handleClickLeft = () => {
     if (gridRef.current) {
       const itemWidth =
         gridRef.current.firstChild?.getBoundingClientRect().width;
-      gridRef.current.scrollBy({ left: -itemWidth, behavior: "smooth" });
+      gridRef.current.scrollBy({ left: -itemWidth, behavior: "smooth" }); // Зсув на третину контейнера
+      console.log(itemWidth);
     }
   };
 
@@ -80,23 +117,60 @@ export const Works = () => {
     if (gridRef.current) {
       const itemWidth =
         gridRef.current.firstChild?.getBoundingClientRect().width;
-      gridRef.current.scrollBy({ left: itemWidth, behavior: "smooth" });
+      gridRef.current.scrollBy({ left: itemWidth, behavior: "smooth" }); // Зсув на третину контейнера
     }
+  };
+
+  const handleImageMouseMove = (e, imgType) => {
+    const rect = e.target.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    const deltaX = mouseX - centerX;
+    const deltaY = mouseY - centerY;
+
+    const angleX = -(deltaY / centerY) * 10;
+    const angleY = (deltaX / centerX) * 10;
+
+    setRotate({ x: angleX, y: angleY, scale: 1.1 });
+    setActiveImage(imgType);
+  };
+
+  const handleImageMouseLeave = () => {
+    setRotate({ x: 0, y: 0, scale: 1 });
+    setActiveImage(null);
   };
 
   return (
     <>
-      <BlockTitle title="Works" />
+      <BlockTitle title='Works' />
       <div className={s.wrapper}>
-        {loading ? (
-          <div className={s.grid} ref={gridRef}>
-            {[...Array(4)].map((_, index) => (
-              <div key={index} className={s.albumWrap}>
-                <div className={s.skeleton}></div>
-              </div>
-            ))}
+        {userLoggedIn && (
+          <div className={s.uploadWrap}>
+            <input
+              className={s.inputFile}
+              type='file'
+              onChange={(e) => setImageUpload(e.target.files[0])}
+            />
+            <input
+              className={s.inputTitle}
+              type='text'
+              placeholder='Enter album name'
+              value={albumName}
+              onChange={(e) => setAlbumName(e.target.value)}
+            />
+            <button className={s.createAlbum} onClick={uploadImage}>
+              Create Album
+            </button>
           </div>
-        ) : (
+        )}
+        <div className={s.galleryWrap}>
+          {albumCount > 6 && window.innerWidth > 901 && (
+            <IoIosArrowBack onClick={handleClickLeft} className={s.leftArrow} />
+          )}
           <div className={s.grid} ref={gridRef}>
             {albums.map((album) => (
               <div
@@ -105,15 +179,33 @@ export const Works = () => {
                 onClick={() => navigate(`album/${album.name}`)}
               >
                 <img
+                  onMouseMove={(e) => handleImageMouseMove(e, album.cover)}
+                  onMouseLeave={handleImageMouseLeave}
                   className={s.image}
                   src={album.cover}
                   alt={album.name}
+                  style={{
+                    transform: `${
+                      activeImage === album.cover && window.innerWidth > 960
+                        ? `perspective(1000px) rotateX(${-rotate.x}deg) rotateY(${-rotate.y}deg)`
+                        : `perspective(1000px) `
+                    }`,
+                    transition: "transform 0.1s ease-out",
+                  }}
                 />
                 <span className={s.title}>{album.name}</span>
                 {userLoggedIn && (
                   <button
-                    className={s.deleteAlbum}
+                    style={{
+                      transform: `${
+                        activeImage === album.cover && window.innerWidth > 960
+                          ? `perspective(1000px) rotateX(20deg) rotateY(${-rotate.y}deg)`
+                          : `perspective(1000px) `
+                      }`,
+                      transition: "transform 0.1s ease-out",
+                    }}
                     onClick={(e) => handleDelete(e, album)}
+                    className={s.deleteAlbum}
                   >
                     <MdClose />
                   </button>
@@ -121,7 +213,13 @@ export const Works = () => {
               </div>
             ))}
           </div>
-        )}
+          {albumCount > 6 && window.innerWidth > 901 && (
+            <IoIosArrowForward
+              onClick={handleClickRight}
+              className={s.rightArrow}
+            />
+          )}
+        </div>
       </div>
     </>
   );
