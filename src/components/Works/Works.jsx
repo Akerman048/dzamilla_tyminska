@@ -13,10 +13,12 @@ import {
   addDoc,
   getDocs,
   doc,
+  // updateDoc,
   deleteDoc,
 } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
-import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { IoIosArrowBack } from "react-icons/io";
+import { IoIosArrowForward } from "react-icons/io";
 import { MdClose } from "react-icons/md";
 import { useAuth } from "../../contexts/authContext";
 
@@ -34,7 +36,21 @@ export const Works = () => {
 
   const albumsCollectionRef = collection(db, "albums");
 
-  // ✅ Завантаження альбомів
+  useEffect(() => {
+    if (gridRef.current) {
+      setGridWidth(gridRef.current.getBoundingClientRect().width);
+    }
+
+    const handleResize = () => {
+      if (gridRef.current) {
+        setGridWidth(gridRef.current.getBoundingClientRect().width);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [gridWidth]);
+
   useEffect(() => {
     const fetchAlbums = async () => {
       const snapshot = await getDocs(albumsCollectionRef);
@@ -47,9 +63,8 @@ export const Works = () => {
     };
 
     fetchAlbums();
-  }, [albumsCollectionRef]);
+  }, [albums, albumsCollectionRef]);
 
-  // ✅ Використовуємо ResizeObserver для правильного обчислення розміру сітки
   useEffect(() => {
     if (gridRef.current) {
       const resizeObserver = new ResizeObserver(() => {
@@ -61,7 +76,6 @@ export const Works = () => {
     }
   }, []);
 
-  // ✅ Невеликий setTimeout, щоб примусити перерахунок розмірів після завантаження DOM
   useEffect(() => {
     if (gridRef.current) {
       setTimeout(() => {
@@ -69,6 +83,7 @@ export const Works = () => {
       }, 100);
     }
   }, [albums]);
+  
 
   const uploadImage = async () => {
     if (!imageUpload || !albumName) {
@@ -99,31 +114,84 @@ export const Works = () => {
     const imageRef = ref(storage, album.cover);
     try {
       await deleteDoc(albumRef);
+
       await deleteObject(imageRef);
 
-      setAlbums((prev) => prev.filter((a) => a.id !== album.id));
+      setAlbums((prevAlbums) => prevAlbums.filter((a) => a.id !== album.id));
     } catch (error) {
       console.error("Помилка при видаленні альбому:", error);
+      alert("Не вдалося видалити альбом. Спробуйте ще раз.");
     }
   };
 
   const handleClickLeft = () => {
-    gridRef.current.scrollBy({ left: -gridWidth, behavior: "smooth" });
+    if (gridRef.current) {
+      const itemWidth =
+        gridRef.current.firstChild?.getBoundingClientRect().width;
+      gridRef.current.scrollBy({ left: -itemWidth, behavior: "smooth" }); // Зсув на третину контейнера
+      console.log(itemWidth);
+    }
   };
 
   const handleClickRight = () => {
-    gridRef.current.scrollBy({ left: gridWidth, behavior: "smooth" });
+    if (gridRef.current) {
+      const itemWidth =
+        gridRef.current.firstChild?.getBoundingClientRect().width;
+      gridRef.current.scrollBy({ left: itemWidth, behavior: "smooth" }); // Зсув на третину контейнера
+    }
+  };
+
+  const handleImageMouseMove = (e, imgType) => {
+    const rect = e.target.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    const deltaX = mouseX - centerX;
+    const deltaY = mouseY - centerY;
+
+    const angleX = -(deltaY / centerY) * 10;
+    const angleY = (deltaX / centerX) * 10;
+
+    setRotate({ x: angleX, y: angleY, scale: 1.1 });
+    setActiveImage(imgType);
+  };
+
+  const handleImageMouseLeave = () => {
+    setRotate({ x: 0, y: 0, scale: 1 });
+    setActiveImage(null);
   };
 
   return (
     <>
-      <BlockTitle title="Works" />
+      <BlockTitle title='Works' />
       <div className={s.wrapper}>
+        {userLoggedIn && (
+          <div className={s.uploadWrap}>
+            <input
+              className={s.inputFile}
+              type='file'
+              onChange={(e) => setImageUpload(e.target.files[0])}
+            />
+            <input
+              className={s.inputTitle}
+              type='text'
+              placeholder='Enter album name'
+              value={albumName}
+              onChange={(e) => setAlbumName(e.target.value)}
+            />
+            <button className={s.createAlbum} onClick={uploadImage}>
+              Create Album
+            </button>
+          </div>
+        )}
         <div className={s.galleryWrap}>
           {albumCount > 6 && window.innerWidth > 901 && (
             <IoIosArrowBack onClick={handleClickLeft} className={s.leftArrow} />
           )}
-          <div className={s.grid} ref={gridRef} key={albums.length}>
+          <div className={s.grid} ref={gridRef}>
             {albums.map((album) => (
               <div
                 key={album.id}
@@ -131,13 +199,31 @@ export const Works = () => {
                 onClick={() => navigate(`album/${album.name}`)}
               >
                 <img
+                  onMouseMove={(e) => handleImageMouseMove(e, album.cover)}
+                  onMouseLeave={handleImageMouseLeave}
                   className={s.image}
                   src={album.cover}
                   alt={album.name}
+                  style={{
+                    transform: `${
+                      activeImage === album.cover && window.innerWidth > 960
+                        ? `perspective(1000px) rotateX(${-rotate.x}deg) rotateY(${-rotate.y}deg)`
+                        : `perspective(1000px) `
+                    }`,
+                    transition: "transform 0.1s ease-out",
+                  }}
                 />
                 <span className={s.title}>{album.name}</span>
                 {userLoggedIn && (
                   <button
+                    style={{
+                      transform: `${
+                        activeImage === album.cover && window.innerWidth > 960
+                          ? `perspective(1000px) rotateX(20deg) rotateY(${-rotate.y}deg)`
+                          : `perspective(1000px) `
+                      }`,
+                      transition: "transform 0.1s ease-out",
+                    }}
                     onClick={(e) => handleDelete(e, album)}
                     className={s.deleteAlbum}
                   >
