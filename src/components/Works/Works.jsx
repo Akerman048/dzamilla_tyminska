@@ -13,7 +13,6 @@ import {
   addDoc,
   getDocs,
   doc,
-  // updateDoc,
   deleteDoc,
 } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
@@ -31,27 +30,10 @@ export const Works = () => {
   const gridRef = useRef(null);
   const [gridWidth, setGridWidth] = useState(0);
   const [albumCount, setAlbumCount] = useState(0);
-  const [rotate, setRotate] = useState({ x: 0, y: 0, scale: 1 });
-  const [activeImage, setActiveImage] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const [gridReady, setGridReady] = useState(false);
 
   const albumsCollectionRef = collection(db, "albums");
-
-  useEffect(() => {
-    if (gridRef.current) {
-      setGridWidth(gridRef.current.getBoundingClientRect().width);
-    }
-
-    const handleResize = () => {
-      if (gridRef.current) {
-        setGridWidth(gridRef.current.getBoundingClientRect().width);
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [gridWidth]);
 
   useEffect(() => {
     const fetchAlbums = async () => {
@@ -59,85 +41,38 @@ export const Works = () => {
       if (cachedAlbums) {
         setAlbums(JSON.parse(cachedAlbums));
         setAlbumCount(JSON.parse(cachedAlbums).length);
-        setLoading(false); // ✅ Завантаження завершено
+        setLoading(false);
         return;
       }
-  
+
       const snapshot = await getDocs(albumsCollectionRef);
       const albumsData = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
-  
+
       setAlbums(albumsData);
       setAlbumCount(albumsData.length);
-  
       localStorage.setItem("albums", JSON.stringify(albumsData));
-      setLoading(false); // ✅ Завантаження завершено
+      setLoading(false);
     };
-  
-    if (albums.length === 0) {
-      fetchAlbums();
-    }
-  }, [albums.length, albumsCollectionRef]);
-  
-  
 
-  const uploadImage = async () => {
-    if (!imageUpload || !albumName) {
-      alert("Виберіть файл і введіть назву альбому!");
-      return;
-    }
-  
-    const imageRef = ref(storage, `albums/${albumName}/${imageUpload.name}`);
-    const snapshot = await uploadBytes(imageRef, imageUpload);
-    const url = await getDownloadURL(snapshot.ref);
-  
-    const newAlbumRef = await addDoc(albumsCollectionRef, {
-      name: albumName,
-      cover: url,
-    });
-  
-    const newAlbum = { id: newAlbumRef.id, name: albumName, cover: url };
-  
-    const updatedAlbums = [...albums, newAlbum];
-    setAlbums(updatedAlbums);
-    setAlbumName("");
-    setImageUpload(null);
-  
-    // Оновлюємо localStorage після додавання
-    localStorage.setItem("albums", JSON.stringify(updatedAlbums));
-  };
-  
+    fetchAlbums();
+  }, [albumsCollectionRef]);
 
-  const handleDelete = async (e, album) => {
-    e.stopPropagation();
-  
-    const albumRef = doc(db, "albums", album.id);
-    const imageRef = ref(storage, album.cover);
-  
-    try {
-      await deleteDoc(albumRef);
-      await deleteObject(imageRef);
-  
-      const updatedAlbums = albums.filter((a) => a.id !== album.id);
-      setAlbums(updatedAlbums);
-  
-      // Оновлюємо localStorage після видалення
-      localStorage.setItem("albums", JSON.stringify(updatedAlbums));
-    } catch (error) {
-      console.error("Помилка при видаленні альбому:", error);
-      alert("Не вдалося видалити альбом. Спробуйте ще раз.");
+  // ✅ Визначаємо ширину сітки після завантаження альбомів
+  useEffect(() => {
+    if (gridRef.current && albums.length > 0) {
+      setGridWidth(gridRef.current.getBoundingClientRect().width);
+      setGridReady(true); // ✅ Оновлюємо стан тільки коли сітка готова
     }
-  };
-  
+  }, [albums]); // Оновлюємо при зміні стану `albums`
 
   const handleClickLeft = () => {
     if (gridRef.current) {
       const itemWidth =
         gridRef.current.firstChild?.getBoundingClientRect().width;
-      gridRef.current.scrollBy({ left: -itemWidth, behavior: "smooth" }); // Зсув на третину контейнера
-      console.log(itemWidth);
+      gridRef.current.scrollBy({ left: -itemWidth, behavior: "smooth" });
     }
   };
 
@@ -145,111 +80,48 @@ export const Works = () => {
     if (gridRef.current) {
       const itemWidth =
         gridRef.current.firstChild?.getBoundingClientRect().width;
-      gridRef.current.scrollBy({ left: itemWidth, behavior: "smooth" }); // Зсув на третину контейнера
+      gridRef.current.scrollBy({ left: itemWidth, behavior: "smooth" });
     }
-  };
-
-  const handleImageMouseMove = (e, imgType) => {
-    const rect = e.target.getBoundingClientRect();
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-
-    const deltaX = mouseX - centerX;
-    const deltaY = mouseY - centerY;
-
-    const angleX = -(deltaY / centerY) * 10;
-    const angleY = (deltaX / centerX) * 10;
-
-    setRotate({ x: angleX, y: angleY, scale: 1.1 });
-    setActiveImage(imgType);
-  };
-
-  const handleImageMouseLeave = () => {
-    setRotate({ x: 0, y: 0, scale: 1 });
-    setActiveImage(null);
   };
 
   return (
     <>
-      <BlockTitle title='Works' />
+      <BlockTitle title="Works" />
       <div className={s.wrapper}>
-        {userLoggedIn && (
-          <div className={s.uploadWrap}>
-            <input
-              className={s.inputFile}
-              type='file'
-              onChange={(e) => setImageUpload(e.target.files[0])}
-            />
-            <input
-              className={s.inputTitle}
-              type='text'
-              placeholder='Enter album name'
-              value={albumName}
-              onChange={(e) => setAlbumName(e.target.value)}
-            />
-            <button className={s.createAlbum} onClick={uploadImage}>
-              Create Album
-            </button>
+        {loading ? (
+          <div className={s.grid} ref={gridRef}>
+            {[...Array(4)].map((_, index) => (
+              <div key={index} className={s.albumWrap}>
+                <div className={s.skeleton}></div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className={s.grid} ref={gridRef}>
+            {albums.map((album) => (
+              <div
+                key={album.id}
+                className={s.albumWrap}
+                onClick={() => navigate(`album/${album.name}`)}
+              >
+                <img
+                  className={s.image}
+                  src={album.cover}
+                  alt={album.name}
+                />
+                <span className={s.title}>{album.name}</span>
+                {userLoggedIn && (
+                  <button
+                    className={s.deleteAlbum}
+                    onClick={(e) => handleDelete(e, album)}
+                  >
+                    <MdClose />
+                  </button>
+                )}
+              </div>
+            ))}
           </div>
         )}
-        <div className={s.galleryWrap}>
-          {albumCount > 6 && window.innerWidth > 901 && (
-            <IoIosArrowBack onClick={handleClickLeft} className={s.leftArrow} />
-          )}
-          <div className={s.grid} ref={gridRef}>
-  {loading ? (
-    // Показуємо 4 заглушки для заповнення сітки
-    [...Array(4)].map((_, index) => (
-      <div key={index} className={s.albumWrap}>
-        <div className={s.skeleton}></div>
-      </div>
-    ))
-  ) : (
-    albums.map((album) => (
-      <div
-        key={album.id}
-        className={s.albumWrap}
-        onClick={() => navigate(`album/${album.name}`)}
-      >
-        <img
-          onMouseMove={(e) => handleImageMouseMove(e, album.cover)}
-          onMouseLeave={handleImageMouseLeave}
-          className={s.image}
-          src={album.cover}
-          alt={album.name}
-          style={{
-            transform: `${
-              activeImage === album.cover && window.innerWidth > 960
-                ? `perspective(1000px) rotateX(${-rotate.x}deg) rotateY(${-rotate.y}deg)`
-                : `perspective(1000px)`
-            }`,
-            transition: "transform 0.1s ease-out",
-          }}
-        />
-        <span className={s.title}>{album.name}</span>
-        {userLoggedIn && (
-          <button
-            className={s.deleteAlbum}
-            onClick={(e) => handleDelete(e, album)}
-          >
-            <MdClose />
-          </button>
-        )}
-      </div>
-    ))
-  )}
-</div>
-
-          {albumCount > 6 && window.innerWidth > 901 && (
-            <IoIosArrowForward
-              onClick={handleClickRight}
-              className={s.rightArrow}
-            />
-          )}
-        </div>
       </div>
     </>
   );
