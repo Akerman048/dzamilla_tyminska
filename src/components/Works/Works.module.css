@@ -137,9 +137,9 @@
     width: 100%;
   }
 
-  .albumWrap img {
+  /* .albumWrap img {
     width: 350px;
-  }
+  } */
 }
 
 @media screen and (max-width: 1350px) {
@@ -263,16 +263,20 @@
   }
 
   .albumWrap {
-    max-width: 90vw;
     width: 100%;
+    max-width: 350px;
     max-height: 230px;
     height: 100%;
   }
 
   .image {
-    max-width: 90vw;
+    max-width: 350px;
     width: 100%;
     max-height: 230px;
     height: 100%;
+  }
+
+  .image img {
+   object-fit: cover;
   }
 }
