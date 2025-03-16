@@ -152,7 +152,7 @@ export const AlbumPage = () => {
     setSelectedPhotoIndex(null);
     setOffsetX(0);
     setIsDragging(false);
-  
+
     // Прибираємо обробники подій при закритті модального вікна
     window.removeEventListener("mousemove", handleMouseMove);
     window.removeEventListener("mouseup", handleMouseUp);
@@ -198,31 +198,31 @@ export const AlbumPage = () => {
   const handleMouseDown = (e) => {
     e.preventDefault();
     setIsDragging(true);
-  
+
     // Встановлюємо стартову позицію як координати мишки при натисканні
     setStartX(e.clientX);
-  
+
     setOffsetX(0); // Початкове зміщення нульове
-    
+
     // Додаємо глобальні обробники подій
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("mouseup", handleMouseUp);
   };
-  
+
   const handleMouseMove = (e) => {
     if (!isDragging) return;
-  
+
     e.preventDefault();
     // Визначаємо зміщення на основі початкової позиції мишки
     const diff = e.clientX - startX;
     setOffsetX(diff);
   };
-  
+
   const handleMouseUp = () => {
     if (!isDragging) return;
-  
+
     setIsDragging(false);
-  
+
     // Перемикання на наступне фото, якщо поріг перевищено
     if (offsetX > swipeThreshold) {
       animateSwipe(window.innerWidth, () => {
@@ -241,21 +241,21 @@ export const AlbumPage = () => {
     else {
       animateSwipe(0, () => setOffsetX(0));
     }
-  
+
     // Видаляємо глобальні обробники подій
     window.removeEventListener("mousemove", handleMouseMove);
     window.removeEventListener("mouseup", handleMouseUp);
   };
-  
+
   const animateSwipe = (targetOffset, callback) => {
     let startTime;
     const duration = 200; // Тривалість анімації у мілісекундах
     const startOffset = offsetX;
-  
+
     const step = (timestamp) => {
       if (!startTime) startTime = timestamp;
       const progress = (timestamp - startTime) / duration;
-  
+
       if (progress < 1) {
         const newOffset = startOffset + (targetOffset - startOffset) * progress;
         setOffsetX(newOffset);
@@ -265,12 +265,39 @@ export const AlbumPage = () => {
         if (callback) callback();
       }
     };
-  
+
     requestAnimationFrame(step);
   };
-  
-  
-  
+
+  const handleTouchStart = (e) => {
+    setIsDragging(true);
+    setStartX(e.touches[0].clientX);
+    setOffsetX(0);
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isDragging) return;
+
+    const diff = e.touches[0].clientX - startX;
+    setOffsetX(diff);
+  };
+
+  const handleTouchEnd = () => {
+    if (!isDragging) return;
+
+    setIsDragging(false);
+
+    if (offsetX > swipeThreshold) {
+      showPrevPhoto();
+    }
+
+    if (offsetX < -swipeThreshold) {
+      showNextPhoto();
+    }
+
+    setOffsetX(0);
+  };
+
   return (
     <>
       {/* <SideNav sideLines={false}/> */}
@@ -345,25 +372,30 @@ export const AlbumPage = () => {
 
       {selectedPhotoIndex !== null && photos[selectedPhotoIndex] && (
         <div className={s.modal} onClick={handleCloseModal}>
-          <div   className={`${s.modalImageWrapper} ${
+          <div
+            className={`${s.modalImageWrapper} ${
               isVisible ? s.fadeIn : s.hidden
-            }`}>
-          <img
-            src={photos[selectedPhotoIndex].url}
-            alt='Full view'
-            className={s.modalImage}
-            style={{
-              transform: `translateX(${offsetX}px)`,
-              transition: isDragging ? "transform 0.1s ease" : "none",
-              cursor: isDragging ? "grabbing" : "grab",
-              
-            }}
-            onClick={(e) => e.stopPropagation()}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseUp}
-          /></div>
+            }`}
+          >
+            <img
+              src={photos[selectedPhotoIndex].url}
+              alt='Full view'
+              className={s.modalImage}
+              style={{
+                transform: `translateX(${offsetX}px)`,
+                transition: isDragging ? "transform 0.1s ease" : "none",
+                cursor: isDragging ? "grabbing" : "grab",
+              }}
+              onClick={(e) => e.stopPropagation()}
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseUp={handleMouseUp}
+              onMouseLeave={handleMouseUp}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+            />
+          </div>
           <button
             className={s.prevButton}
             onClick={(e) => {
