@@ -230,4 +230,9 @@
     display: flex;
     flex-direction: column;
   }
+  
+  .prevButton,
+  .nextButton{
+bottom: 50px;
+  }
 }
