@@ -23,6 +23,9 @@ import { useAuth } from "../../contexts/authContext";
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import { HiOutlineArrowNarrowLeft } from "react-icons/hi";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
+import { IoCloseOutline } from "react-icons/io5";
+
+
 
 export const AlbumPage = () => {
   const { userLoggedIn } = useAuth();
@@ -280,6 +283,7 @@ export const AlbumPage = () => {
 
     const diff = e.touches[0].clientX - startX;
     setOffsetX(diff);
+    e.preventDefault();
   };
 
   const handleTouchEnd = () => {
@@ -288,11 +292,9 @@ export const AlbumPage = () => {
     setIsDragging(false);
 
     if (offsetX > swipeThreshold) {
-      showPrevPhoto();
-    }
-
-    if (offsetX < -swipeThreshold) {
-      showNextPhoto();
+      showNextPhoto(); // Свайп праворуч → наступне фото
+    } else if (offsetX < -swipeThreshold) {
+      showPrevPhoto(); // Свайп ліворуч → попереднє фото
     }
 
     setOffsetX(0);
@@ -415,7 +417,8 @@ export const AlbumPage = () => {
             <HiOutlineArrowNarrowRight className={s.arrows} />
           </button>
           <button className={s.closeButton} onClick={handleCloseModal}>
-            ✕
+          <IoCloseOutline className={s.closeModal} />
+
           </button>
         </div>
       )}
