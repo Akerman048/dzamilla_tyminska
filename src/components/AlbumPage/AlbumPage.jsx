@@ -21,6 +21,8 @@ import {
 import { MdClose } from "react-icons/md";
 import { useAuth } from "../../contexts/authContext";
 import { FaLongArrowAltLeft } from "react-icons/fa";
+import { HiOutlineArrowNarrowLeft } from "react-icons/hi";
+import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 
 export const AlbumPage = () => {
   const { userLoggedIn } = useAuth();
@@ -30,6 +32,13 @@ export const AlbumPage = () => {
   const [photos, setPhotos] = useState([]);
   const [mainPhoto, setMainPhoto] = useState(null);
   const [albumId, setAlbumId] = useState(null);
+  const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [offsetX, setOffsetX] = useState(0);
+  const [isVisible, setIsVisible] = useState(true);
+  const swipeThreshold = 20;
 
   const photosCollectionRef = collection(db, "photos");
   const albumsCollectionRef = collection(db, "albums");
@@ -135,6 +144,133 @@ export const AlbumPage = () => {
     }
   };
 
+  const handleOpenImg = (index) => {
+    setSelectedPhotoIndex(index);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedPhotoIndex(null);
+    setOffsetX(0);
+    setIsDragging(false);
+  
+    // Прибираємо обробники подій при закритті модального вікна
+    window.removeEventListener("mousemove", handleMouseMove);
+    window.removeEventListener("mouseup", handleMouseUp);
+  };
+
+  const showPrevPhoto = () => {
+    if (isTransitioning) return;
+
+    setIsTransitioning(true);
+    setIsVisible(false); // Миттєво ховаємо поточне фото
+
+    setTimeout(() => {
+      setSelectedPhotoIndex((prev) =>
+        prev > 0 ? prev - 1 : photos.length - 1
+      );
+
+      // Плавно показуємо нове фото після переходу
+      setTimeout(() => {
+        setIsVisible(true);
+        setIsTransitioning(false);
+      }, 20);
+    }, 20);
+  };
+
+  const showNextPhoto = () => {
+    if (isTransitioning) return;
+
+    setIsTransitioning(true);
+    setIsVisible(false); // Миттєво ховаємо поточне фото
+
+    setTimeout(() => {
+      setSelectedPhotoIndex((prev) =>
+        prev < photos.length - 1 ? prev + 1 : 0
+      );
+
+      // Плавно показуємо нове фото після переходу
+      setTimeout(() => {
+        setIsVisible(true);
+        setIsTransitioning(false);
+      }, 20);
+    }, 20);
+  };
+  const handleMouseDown = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+  
+    // Встановлюємо стартову позицію як координати мишки при натисканні
+    setStartX(e.clientX);
+  
+    setOffsetX(0); // Початкове зміщення нульове
+    
+    // Додаємо глобальні обробники подій
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
+  };
+  
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+  
+    e.preventDefault();
+    // Визначаємо зміщення на основі початкової позиції мишки
+    const diff = e.clientX - startX;
+    setOffsetX(diff);
+  };
+  
+  const handleMouseUp = () => {
+    if (!isDragging) return;
+  
+    setIsDragging(false);
+  
+    // Перемикання на наступне фото, якщо поріг перевищено
+    if (offsetX > swipeThreshold) {
+      animateSwipe(window.innerWidth, () => {
+        showNextPhoto();
+        setOffsetX(0);
+      });
+    }
+    // Перемикання на попереднє фото, якщо поріг перевищено
+    else if (offsetX < -swipeThreshold) {
+      animateSwipe(-window.innerWidth, () => {
+        showPrevPhoto();
+        setOffsetX(0);
+      });
+    }
+    // Якщо зміщення менше порогу — повертаємо у вихідне положення
+    else {
+      animateSwipe(0, () => setOffsetX(0));
+    }
+  
+    // Видаляємо глобальні обробники подій
+    window.removeEventListener("mousemove", handleMouseMove);
+    window.removeEventListener("mouseup", handleMouseUp);
+  };
+  
+  const animateSwipe = (targetOffset, callback) => {
+    let startTime;
+    const duration = 200; // Тривалість анімації у мілісекундах
+    const startOffset = offsetX;
+  
+    const step = (timestamp) => {
+      if (!startTime) startTime = timestamp;
+      const progress = (timestamp - startTime) / duration;
+  
+      if (progress < 1) {
+        const newOffset = startOffset + (targetOffset - startOffset) * progress;
+        setOffsetX(newOffset);
+        requestAnimationFrame(step);
+      } else {
+        setOffsetX(targetOffset);
+        if (callback) callback();
+      }
+    };
+  
+    requestAnimationFrame(step);
+  };
+  
+  
+  
   return (
     <>
       {/* <SideNav sideLines={false}/> */}
@@ -153,7 +289,7 @@ export const AlbumPage = () => {
       </div>
 
       <div className={s.albumWrapper}>
-        <button className={s.backButton} onClick={() => navigate("/")}>
+        <button className={s.backButton} onClick={() => navigate("/#works")}>
           <FaLongArrowAltLeft />
           Back to Albums
         </button>
@@ -172,35 +308,85 @@ export const AlbumPage = () => {
         <div className={s.masonryGrid}>
           {columns.map((column, colIndex) => (
             <div key={colIndex} className={s.column}>
-              {column.map((photo) => (
-                <div key={photo.url} className={s.photoContainer}>
-                  <img
-                    className={s.image}
-                    src={photo.url}
-                    alt='photoContainer'
-                  />
-                  {userLoggedIn && (
-                    <button
-                      className={s.setMainButton}
-                      onClick={() => changeMainPhoto(photo.url)}
-                    >
-                      Set as main photo
-                    </button>
-                  )}
-                  {userLoggedIn && (
-                    <button
-                      onClick={(e) => handleDelete(e, photo.url)}
-                      className={s.delete}
-                    >
-                      <MdClose />
-                    </button>
-                  )}
-                </div>
-              ))}
+              {column.map((photo, index) => {
+                const globalIndex =
+                  colIndex * Math.ceil(photos.length / 3) + index; // Визначаємо глобальний індекс
+                return (
+                  <div key={photo.url} className={s.photoContainer}>
+                    <img
+                      className={s.image}
+                      src={photo.url}
+                      alt='photoContainer'
+                      onClick={() => handleOpenImg(globalIndex)} // Передаємо глобальний індекс
+                    />
+                    {userLoggedIn && (
+                      <button
+                        className={s.setMainButton}
+                        onClick={() => changeMainPhoto(photo.url)}
+                      >
+                        Set as main photo
+                      </button>
+                    )}
+                    {userLoggedIn && (
+                      <button
+                        onClick={(e) => handleDelete(e, photo.url)}
+                        className={s.delete}
+                      >
+                        <MdClose />
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           ))}
         </div>
       </div>
+
+      {selectedPhotoIndex !== null && photos[selectedPhotoIndex] && (
+        <div className={s.modal} onClick={handleCloseModal}>
+          <div   className={`${s.modalImageWrapper} ${
+              isVisible ? s.fadeIn : s.hidden
+            }`}>
+          <img
+            src={photos[selectedPhotoIndex].url}
+            alt='Full view'
+            className={s.modalImage}
+            style={{
+              transform: `translateX(${offsetX}px)`,
+              transition: isDragging ? "transform 0.1s ease" : "none",
+              cursor: isDragging ? "grabbing" : "grab",
+              
+            }}
+            onClick={(e) => e.stopPropagation()}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
+          /></div>
+          <button
+            className={s.prevButton}
+            onClick={(e) => {
+              e.stopPropagation();
+              showPrevPhoto();
+            }}
+          >
+            <HiOutlineArrowNarrowLeft className={s.arrows} />
+          </button>
+          <button
+            className={s.nextButton}
+            onClick={(e) => {
+              e.stopPropagation();
+              showNextPhoto();
+            }}
+          >
+            <HiOutlineArrowNarrowRight className={s.arrows} />
+          </button>
+          <button className={s.closeButton} onClick={handleCloseModal}>
+            ✕
+          </button>
+        </div>
+      )}
     </>
   );
 };

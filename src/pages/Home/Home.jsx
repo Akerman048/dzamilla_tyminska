@@ -16,32 +16,32 @@ export const Home = () => {
   const handleScroll = (event) => {
     const container = scrollRef.current;
     if (!container) return;
-  
+
     // const containerWidth = container.offsetWidth;
-  
+
     if (window.innerWidth > 1280) {
       event.preventDefault(); // Блокуємо стандартний скрол тільки для великих екранів
       const containerHeight = container.offsetHeight;
-      container.scrollTop += event.deltaY > 0 ? containerHeight : -containerHeight;
-    } 
+      container.scrollTop +=
+        event.deltaY > 0 ? containerHeight : -containerHeight;
+    }
   };
-  
+
   // Додаємо обробник події тільки якщо ширина > 1280px
   useEffect(() => {
     const container = scrollRef.current;
     if (!container) return;
-  
+
     const containerWidth = container.offsetWidth;
-  
+
     if (containerWidth > 1280) {
       container.addEventListener("wheel", handleScroll, { passive: false });
     }
-  
+
     return () => {
       container.removeEventListener("wheel", handleScroll);
     };
   }, []); // Виконуємо лише один раз при завантаженні
-  
 
   useEffect(() => {
     const sections = document.querySelectorAll("div[id]");
@@ -68,6 +68,16 @@ export const Home = () => {
         observer.unobserve(section);
       });
     };
+  }, []);
+
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash) {
+      const targetElement = document.querySelector(hash);
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: "smooth" });
+      }
+    }
   }, []);
   return (
     <div className={s.container} ref={scrollRef} onWheel={handleScroll}>
