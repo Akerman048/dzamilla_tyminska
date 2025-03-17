@@ -20,7 +20,7 @@ import {
 } from "firebase/firestore";
 import { MdClose } from "react-icons/md";
 import { useAuth } from "../../contexts/authContext";
-import { FaLongArrowAltLeft } from "react-icons/fa";
+// import { FaLongArrowAltLeft } from "react-icons/fa";
 import { HiOutlineArrowNarrowLeft } from "react-icons/hi";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import { IoCloseOutline } from "react-icons/io5";
