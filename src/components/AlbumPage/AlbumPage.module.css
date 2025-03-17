@@ -55,6 +55,7 @@
   text-transform: uppercase;
   font-family: serif;
   letter-spacing: 6px;
+  margin-bottom: 40px;
 }
 
 .uploadWrap {
@@ -154,6 +155,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 10000;
 }
 
 .modalImage {
@@ -179,7 +181,7 @@
   cursor: pointer;
 }
 
-.arrows{
+.arrows {
   font-size: 32px;
 }
 
@@ -188,11 +190,11 @@
   right: 10px;
 }
 
-.prevButton{
+.prevButton {
   left: 20px;
 }
 
-.nextButton{
+.nextButton {
   right: 20px;
 }
 
@@ -210,8 +212,7 @@
 }
 
 .fadeOut {
-  opacity: 0;
-  
+  opacity: 1;
 }
 
 .fadeIn {
@@ -220,19 +221,32 @@
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 .hidden {
-  opacity: 0;
+  opacity: 1;
   transform: scale(0.95);
   transition: none; /* Вимикаємо анімацію при приховуванні */
 }
+
+@media screen and (max-width: 1025px) {
+  .masonryGrid {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .prevButton,
+  .nextButton {
+    display: none;
+  }
+}
+
 
 @media screen and (max-width: 570px) {
   .masonryGrid {
     display: flex;
     flex-direction: column;
   }
-  
+
   .prevButton,
-  .nextButton{
-bottom: 50px;
+  .nextButton {
+    bottom: 50px;
   }
 }

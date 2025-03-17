@@ -24,8 +24,7 @@ import { FaLongArrowAltLeft } from "react-icons/fa";
 import { HiOutlineArrowNarrowLeft } from "react-icons/hi";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import { IoCloseOutline } from "react-icons/io5";
-
-
+import { SideNav } from "../Elements/SideNav/SideNav";
 
 export const AlbumPage = () => {
   const { userLoggedIn } = useAuth();
@@ -148,7 +147,9 @@ export const AlbumPage = () => {
   };
 
   const handleOpenImg = (index) => {
-    setSelectedPhotoIndex(index);
+    if (photos[index]) {
+      setSelectedPhotoIndex(index);
+    }
   };
 
   const handleCloseModal = () => {
@@ -181,7 +182,7 @@ export const AlbumPage = () => {
   };
 
   const showNextPhoto = () => {
-    if (isTransitioning) return;
+    if (isTransitioning || !photos.length) return;
 
     setIsTransitioning(true);
     setIsVisible(false); // Миттєво ховаємо поточне фото
@@ -216,6 +217,8 @@ export const AlbumPage = () => {
     if (!isDragging) return;
 
     e.preventDefault();
+
+    if (!e.target || typeof e.target.getBoundingClientRect !== "function") return;
     // Визначаємо зміщення на основі початкової позиції мишки
     const diff = e.clientX - startX;
     setOffsetX(diff);
@@ -281,6 +284,8 @@ export const AlbumPage = () => {
   const handleTouchMove = (e) => {
     if (!isDragging) return;
 
+    if (!e.touches[0] || !e.target || typeof e.target.getBoundingClientRect !== "function") return;
+
     const diff = e.touches[0].clientX - startX;
     setOffsetX(diff);
     e.preventDefault();
@@ -302,12 +307,15 @@ export const AlbumPage = () => {
 
   return (
     <>
-      {/* <SideNav sideLines={false}/> */}
+      <SideNav sideLines={false}/>
       <div className={s.nav}>
-        <h2 className={s.name}>Dżamilla Tymińska</h2>{" "}
-        <button className={s.homebutton} onClick={() => navigate("/")}>
+        <h2 className={s.name}><a href='#main' onClick={() => {
+                
+                navigate("/#main");
+              }}>Dżamilla Tymińska </a></h2>{" "}
+        {/* <button className={s.homebutton} onClick={() => navigate("/")}>
           home
-        </button>
+        </button> */}
       </div>
       <div className={s.mainPhoto}>
         {mainPhoto ? (
@@ -318,10 +326,10 @@ export const AlbumPage = () => {
       </div>
 
       <div className={s.albumWrapper}>
-        <button className={s.backButton} onClick={() => navigate("/#works")}>
+        {/* <button className={s.backButton} onClick={() => navigate("/#works")}>
           <FaLongArrowAltLeft />
           Back to Albums
-        </button>
+        </button> */}
         <h2 className={s.albumName}>{albumName}</h2>
 
         {userLoggedIn && (
@@ -417,8 +425,7 @@ export const AlbumPage = () => {
             <HiOutlineArrowNarrowRight className={s.arrows} />
           </button>
           <button className={s.closeButton} onClick={handleCloseModal}>
-          <IoCloseOutline className={s.closeModal} />
-
+            <IoCloseOutline className={s.closeModal} />
           </button>
         </div>
       )}

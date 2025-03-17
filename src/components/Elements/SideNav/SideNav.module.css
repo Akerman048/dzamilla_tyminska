@@ -62,20 +62,27 @@
   position: fixed;
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 15px;
   top: 50%;
   transform: translateY(-50%);
   right: 50px;
 }
 
-.navPoints li {
-  width: 30px;
-  height: 2px;
-  background-color: rgba(71, 71, 71, 0.332);
+
+.navPoints a{
+  display: block;
+  justify-content: center;
 }
 
-.navPoints li.active {
-  background-color: black; /* Чорний колір для активного пункту */
+.navLine{
+  color: rgba(71, 71, 71, 0.332);
+
+  font-size: 30px;
+}
+
+.navLineActive {
+  font-size: 30px;
+  color: black; 
 }
 .overlay {
   display: flex;
@@ -99,6 +106,7 @@
   text-transform: uppercase;
   font-weight: 300;
   letter-spacing: 10px;
+  cursor: pointer;
 }
 
 .subtitle {

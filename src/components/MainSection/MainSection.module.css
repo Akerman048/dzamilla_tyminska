@@ -146,7 +146,8 @@ padding: 0px 50px;
 @media screen and (max-width: 600px) {
   .MainSection {
     gap: 0px;
-    max-height: 500px;
+    height: 100vh;
+    justify-content:center;
   }
 
   .homeSideImgWrap {
@@ -163,7 +164,7 @@ padding: 0px 50px;
 @media screen and (max-width: 500px) {
   .MainSection {
     gap: 0px;
-    max-height: 500px;
+    height: 100vh;
   }
 
   .homeSideImgWrap {
@@ -174,5 +175,6 @@ padding: 0px 50px;
 
   .name {
     font-size: 18px;
+  
   }
 }

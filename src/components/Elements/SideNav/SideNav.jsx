@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import s from "./SideNav.module.css";
+import { TfiLayoutLineSolid } from "react-icons/tfi";
 
 export const SideNav = ({ activeSection, sideLines }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {}, [isOpen]);
   return (
@@ -12,26 +15,70 @@ export const SideNav = ({ activeSection, sideLines }) => {
       </div>
       {sideLines && window.innerWidth > 1280 && (
         <ul className={s.navPoints}>
-          <li className={activeSection === "main" ? s.active : ""}></li>
-          <li className={activeSection === "works" ? s.active : ""}></li>
-          <li className={activeSection === "about" ? s.active : ""}></li>
-          <li className={activeSection === "contacts" ? s.active : ""}></li>
+          <a href='#main'>
+            <TfiLayoutLineSolid
+              className={activeSection === "main" ? s.navLineActive : s.navLine}
+            />
+          </a>
+          <a href='#works'>
+            <TfiLayoutLineSolid
+              className={
+                activeSection === "works" ? s.navLineActive : s.navLine
+              }
+            />
+          </a>
+          <a href='#about'>
+            <TfiLayoutLineSolid
+              className={
+                activeSection === "about" ? s.navLineActive : s.navLine
+              }
+            />
+          </a>
+          <a href='#contacts'>
+            <TfiLayoutLineSolid
+              className={
+                activeSection === "contacts" ? s.navLineActive : s.navLine
+              }
+            />
+          </a>
         </ul>
       )}
       {isOpen && (
         <div className={s.overlay}>
           <div>
-            <h1 className={s.name}>Dżamilla Tymińska</h1>
+            <h1
+              className={s.name}
+            >
+              <a href='#main' onClick={() => {
+                setIsOpen(!isOpen);
+                navigate("/#main");
+              }}>Dżamilla Tymińska </a>
+            </h1>
             <span className={s.subtitle}>creative photography</span>
           </div>
           <ul className={s.navLinks}>
-            <li onClick={() => setIsOpen(!isOpen)}>
+            <li
+              onClick={() => {
+                setIsOpen(!isOpen);
+                navigate("/#works");
+              }}
+            >
               <a href='#works'>works</a>
             </li>
-            <li onClick={() => setIsOpen(!isOpen)}>
+            <li
+              onClick={() => {
+                setIsOpen(!isOpen);
+                navigate("/#about");
+              }}
+            >
               <a href='#about'>about</a>
             </li>
-            <li onClick={() => setIsOpen(!isOpen)}>
+            <li
+              onClick={() => {
+                setIsOpen(!isOpen);
+                navigate("/#contacts");
+              }}
+            >
               <a href='#contacts'>contacts</a>
             </li>
           </ul>

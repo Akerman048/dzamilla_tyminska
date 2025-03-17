@@ -83,7 +83,6 @@ export const Works = () => {
       }, 100);
     }
   }, [albums]);
-  
 
   const uploadImage = async () => {
     if (!imageUpload || !albumName) {
@@ -188,7 +187,7 @@ export const Works = () => {
           </div>
         )}
         <div className={s.galleryWrap}>
-          {albumCount > 6 && window.innerWidth > 901 && (
+          {albumCount > 6 && (
             <IoIosArrowBack onClick={handleClickLeft} className={s.leftArrow} />
           )}
           <div className={s.grid} ref={gridRef}>
@@ -233,7 +232,7 @@ export const Works = () => {
               </div>
             ))}
           </div>
-          {albumCount > 6 && window.innerWidth > 901 && (
+          {albumCount > 6 && (
             <IoIosArrowForward
               onClick={handleClickRight}
               className={s.rightArrow}
