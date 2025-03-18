@@ -91,7 +91,7 @@ export const Home = () => {
     return () => {
       sectionElements.forEach((section) => observer.unobserve(section));
     };
-  }, []);
+  }, [sections]);
 
   // Додати обробник для мишки та тачпаду
   useEffect(() => {
@@ -103,7 +103,7 @@ export const Home = () => {
     return () => {
       container.removeEventListener("wheel", handleScroll);
     };
-  }, [currentSectionIndex, isScrolling]);
+  }, [currentSectionIndex, isScrolling, handleScroll]);
 
   // Перехід до компонента з URL (#)
   useEffect(() => {
