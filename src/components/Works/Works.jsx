@@ -56,7 +56,6 @@ export const Works = () => {
   useEffect(() => {
     const fetchAlbums = async () => {
       const snapshot = await getDocs(albumsCollectionRef);
-      setAlbumCount(snapshot.size);
       const albumsData = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
