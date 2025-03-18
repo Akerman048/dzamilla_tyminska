@@ -34,6 +34,9 @@ export const Works = () => {
   const [rotate, setRotate] = useState({ x: 0, y: 0, scale: 1 });
   const [activeImage, setActiveImage] = useState(null);
 
+  const [hideLeftArrow, setHideLeftArrow] = useState(true);
+  const [hideRightArrow, setHideRightArrow] = useState(false);
+
   const albumsCollectionRef = collection(db, "albums");
 
   useEffect(() => {
@@ -65,6 +68,15 @@ export const Works = () => {
     fetchAlbums();
   }, [albums, albumsCollectionRef]);
 
+  const updateArrowsVisibility = () => {
+    if (gridRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = gridRef.current;
+
+      setHideLeftArrow(scrollLeft === 0);
+      setHideRightArrow(scrollLeft + clientWidth >= scrollWidth);
+    }
+  };
+
   useEffect(() => {
     if (gridRef.current) {
       const resizeObserver = new ResizeObserver(() => {
@@ -82,6 +94,20 @@ export const Works = () => {
         setGridWidth(gridRef.current.getBoundingClientRect().width);
       }, 100);
     }
+  }, [albums]);
+
+  useEffect(() => {
+    const gridElement = gridRef.current;
+    if (gridElement) {
+      gridElement.addEventListener("scroll", updateArrowsVisibility);
+      updateArrowsVisibility(); // Оновлення при завантаженні
+    }
+  
+    return () => {
+      if (gridElement) {
+        gridElement.removeEventListener("scroll", updateArrowsVisibility);
+      }
+    };
   }, [albums]);
 
   const uploadImage = async () => {
@@ -187,9 +213,9 @@ export const Works = () => {
           </div>
         )}
         <div className={s.galleryWrap}>
-          {albumCount > 6 && (
-            <IoIosArrowBack onClick={handleClickLeft} className={s.leftArrow} />
-          )}
+        {!hideLeftArrow && window.innerWidth > 430 && (
+  <IoIosArrowBack onClick={handleClickLeft} className={s.leftArrow} />
+)}
           <div className={s.grid} ref={gridRef}>
             {albums.map((album) => (
               <div
@@ -232,12 +258,10 @@ export const Works = () => {
               </div>
             ))}
           </div>
-          {albumCount > 6 && (
-            <IoIosArrowForward
-              onClick={handleClickRight}
-              className={s.rightArrow}
-            />
-          )}
+          {!hideRightArrow &&  window.innerWidth > 430 && (
+  <IoIosArrowForward onClick={handleClickRight} className={s.rightArrow} />
+)}
+
         </div>
       </div>
     </>

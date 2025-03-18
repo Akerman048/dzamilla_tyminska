@@ -3,7 +3,6 @@ import s from "./Home.module.css";
 
 import { MainSection } from "../../components/MainSection/MainSection";
 import { Works } from "../../components/Works/Works";
-
 import { About } from "../../components/About/About";
 import { BlockContainer } from "../../components/Elements/BlockContainer/BlockContainer";
 import { Contacts } from "../../components/Contacts/Contacts";
@@ -12,64 +11,101 @@ import { SideNav } from "../../components/Elements/SideNav/SideNav";
 export const Home = () => {
   const scrollRef = useRef(null);
   const [activeSection, setActiveSection] = useState("main");
+  const [isScrolling, setIsScrolling] = useState(false);
+
+  // Масив секцій для контролю скролу
+  const sections = ["main", "works", "about", "contacts"];
+  const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
 
   const handleScroll = (event) => {
-    const container = scrollRef.current;
-    if (!container) return;
+    if (isScrolling) return; // Якщо вже йде скрол — ігноруємо подію
 
-    // const containerWidth = container.offsetWidth;
+    event.preventDefault();
 
-    if (window.innerWidth > 1280) {
-      event.preventDefault(); // Блокуємо стандартний скрол тільки для великих екранів
-      const containerHeight = container.offsetHeight;
-      container.scrollTop +=
-        event.deltaY > 0 ? containerHeight : -containerHeight;
+    if (event.deltaY > 0) {
+      scrollToNextSection(); // Скрол вниз
+    } else if (event.deltaY < 0) {
+      scrollToPreviousSection(); // Скрол вгору
     }
   };
 
-  // Додаємо обробник події тільки якщо ширина > 1280px
+  const scrollToNextSection = () => {
+    if (currentSectionIndex < sections.length - 1) {
+      setIsScrolling(true);
+      setCurrentSectionIndex((prevIndex) => prevIndex + 1);
+
+      const nextSection = document.getElementById(
+        sections[currentSectionIndex + 1]
+      );
+      if (nextSection) {
+        nextSection.scrollIntoView({ behavior: "smooth" });
+
+        // Додаємо затримку, щоб уникнути повторного скролу
+        setTimeout(() => {
+          setIsScrolling(false);
+        }, 600); // Час залежить від тривалості анімації
+      }
+    }
+  };
+
+  const scrollToPreviousSection = () => {
+    if (currentSectionIndex > 0) {
+      setIsScrolling(true);
+      setCurrentSectionIndex((prevIndex) => prevIndex - 1);
+
+      const previousSection = document.getElementById(
+        sections[currentSectionIndex - 1]
+      );
+      if (previousSection) {
+        previousSection.scrollIntoView({ behavior: "smooth" });
+
+        // Додаємо затримку перед повторним скролом
+        setTimeout(() => {
+          setIsScrolling(false);
+        }, 600); // Час залежить від тривалості анімації
+      }
+    }
+  };
+
+  // Відстеження поточного компонента через IntersectionObserver
+  useEffect(() => {
+    const sectionElements = document.querySelectorAll("div[id]");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+            const newIndex = sections.indexOf(entry.target.id);
+            if (newIndex !== -1) {
+              setCurrentSectionIndex(newIndex);
+            }
+          }
+        });
+      },
+      { threshold: 0.5 } // Відстежуємо тільки якщо компонент видно на 50%
+    );
+
+    sectionElements.forEach((section) => observer.observe(section));
+
+    return () => {
+      sectionElements.forEach((section) => observer.unobserve(section));
+    };
+  }, []);
+
+  // Додати обробник для мишки та тачпаду
   useEffect(() => {
     const container = scrollRef.current;
     if (!container) return;
 
-    const containerWidth = container.offsetWidth;
-
-    if (containerWidth > 1280) {
-      container.addEventListener("wheel", handleScroll, { passive: false });
-    }
+    container.addEventListener("wheel", handleScroll, { passive: false });
 
     return () => {
       container.removeEventListener("wheel", handleScroll);
     };
-  }, []); // Виконуємо лише один раз при завантаженні
+  }, [currentSectionIndex, isScrolling]);
 
-  useEffect(() => {
-    const sections = document.querySelectorAll("div[id]");
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          // Ensure the activeSection only updates if the entry is fully visible
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id); // Update activeSection only if fully visible
-          }
-        });
-      },
-      {
-        threshold: 0.5, // Adjust this value as necessary (0 means any visibility, 1 means fully visible)
-      }
-    );
-
-    sections.forEach((section) => {
-      observer.observe(section);
-    });
-
-    return () => {
-      sections.forEach((section) => {
-        observer.unobserve(section);
-      });
-    };
-  }, []);
-
+  // Перехід до компонента з URL (#)
   useEffect(() => {
     const hash = window.location.hash;
     if (hash) {
@@ -79,9 +115,11 @@ export const Home = () => {
       }
     }
   }, []);
+
   return (
-    <div className={s.container} ref={scrollRef} onWheel={handleScroll}>
+    <div className={s.container} ref={scrollRef}>
       <SideNav activeSection={activeSection} sideLines={true} />
+
       <div id='main'>
         <BlockContainer children={<MainSection />} />
       </div>
