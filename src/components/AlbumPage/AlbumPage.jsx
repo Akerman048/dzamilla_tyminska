@@ -383,10 +383,10 @@ export const AlbumPage = () => {
       {selectedPhotoIndex !== null && photos[selectedPhotoIndex] && (
         <div className={s.modal} onClick={handleCloseModal}>
           <div
-            className={`${s.modalImageWrapper} ${
-              isVisible ? s.fadeIn : s.hidden
-            }`}
-          >
+            className={s.modalImageWrapper}
+          ><div className={`${s.imageContainer} ${
+            isVisible ? s.fadeIn : s.hidden
+          }`}>
             <img
               src={photos[selectedPhotoIndex].url}
               alt='Full view'
@@ -404,7 +404,7 @@ export const AlbumPage = () => {
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
-            />
+            /> </div>
             <button className={s.closeButton} onClick={handleCloseModal}>
             <IoCloseOutline className={s.closeModal} />
           </button>
