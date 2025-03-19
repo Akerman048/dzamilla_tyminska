@@ -405,6 +405,9 @@ export const AlbumPage = () => {
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
             />
+            <button className={s.closeButton} onClick={handleCloseModal}>
+            <IoCloseOutline className={s.closeModal} />
+          </button>
           </div>
           <button
             className={s.prevButton}
@@ -424,9 +427,7 @@ export const AlbumPage = () => {
           >
             <HiOutlineArrowNarrowRight className={s.arrows} />
           </button>
-          <button className={s.closeButton} onClick={handleCloseModal}>
-            <IoCloseOutline className={s.closeModal} />
-          </button>
+          
         </div>
       )}
     </>
