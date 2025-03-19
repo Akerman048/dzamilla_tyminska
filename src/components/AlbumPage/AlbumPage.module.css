@@ -194,11 +194,11 @@
   justify-content: center;
   align-items: center;
   z-index: 10;
-  background-color: #4b4a4a;
 }
-.closeModal{
+.closeModal {
   width: 20px;
   height: 20px;
+  font-size: 36px;
   color: #4b4a4a;
 }
 
@@ -250,7 +250,6 @@
   }
 }
 
-
 @media screen and (max-width: 570px) {
   .masonryGrid {
     display: flex;
@@ -263,17 +262,16 @@
   }
 }
 
-
 @media screen and (max-width: 570px) {
   .closeButton {
-    top: 5px;
-    right: 5px;
+    top: 10px;
+    right: 10px;
     width: 36px;
     height: 36px;
   }
 
   .closeModal {
-    width: 36x;
+    width: 36px;
     height: 36px;
   }
 }
