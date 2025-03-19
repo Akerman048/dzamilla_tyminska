@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import s from "./Home.module.css";
 
 import { MainSection } from "../../components/MainSection/MainSection";
@@ -14,23 +14,13 @@ export const Home = () => {
   const [isScrolling, setIsScrolling] = useState(false);
 
   // Масив секцій для контролю скролу
-  const sections = ["main", "works", "about", "contacts"];
+  // ✅ Стабілізація масиву sections за допомогою useMemo()
+  const sections = useMemo(
+    () => ["main", "works", "about", "contacts"],
+    [] // Масив sections не змінюється між рендерами
+  );
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
 
-  const handleScroll = useCallback(
-    (event) => {
-      if (isScrolling) return; // Якщо вже йде скрол — ігноруємо подію
-
-      event.preventDefault();
-
-      if (event.deltaY > 0) {
-        scrollToNextSection(); // Скрол вниз
-      } else if (event.deltaY < 0) {
-        scrollToPreviousSection(); // Скрол вгору
-      }
-    },
-    [isScrolling, currentSectionIndex] // ✅ Додаємо стабільні залежності
-  );
 
   const scrollToNextSection = useCallback(() => {
     if (currentSectionIndex < sections.length - 1) {
@@ -69,6 +59,21 @@ export const Home = () => {
       }
     }
   }, [currentSectionIndex, sections]);
+
+  const handleScroll = useCallback(
+    (event) => {
+      if (isScrolling) return; // Якщо вже йде скрол — ігноруємо подію
+
+      event.preventDefault();
+
+      if (event.deltaY > 0) {
+        scrollToNextSection(); // Скрол вниз
+      } else if (event.deltaY < 0) {
+        scrollToPreviousSection(); // Скрол вгору
+      }
+    },
+    [isScrolling, currentSectionIndex, scrollToNextSection, scrollToPreviousSection] // ✅ Додаємо стабільні залежності
+  );
 
   // Відстеження поточного компонента через IntersectionObserver
   useEffect(() => {

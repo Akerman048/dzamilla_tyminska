@@ -30,7 +30,7 @@ export const Works = () => {
   const navigate = useNavigate();
   const gridRef = useRef(null);
   const [gridWidth, setGridWidth] = useState(0);
-  const [albumCount, setAlbumCount] = useState(0);
+  // const [albumCount, setAlbumCount] = useState(0);
   const [rotate, setRotate] = useState({ x: 0, y: 0, scale: 1 });
   const [activeImage, setActiveImage] = useState(null);
 
@@ -57,7 +57,7 @@ export const Works = () => {
   useEffect(() => {
     const fetchAlbums = async () => {
       const snapshot = await getDocs(albumsCollectionRef);
-      setAlbumCount(snapshot.size);
+      // setAlbumCount(snapshot.size);
       const albumsData = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
