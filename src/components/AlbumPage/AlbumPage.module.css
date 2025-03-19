@@ -198,6 +198,7 @@
 .closeModal{
   width: 20px;
   height: 20px;
+  color: #4b4a4a;
 }
 
 .prevButton {
@@ -266,12 +267,12 @@
   .closeButton {
     top: 5px;
     right: 5px;
-    width: 30px;
-    height: 30px;
+    width: 36px;
+    height: 36px;
   }
 
   .closeModal {
-    width: 16px;
-    height: 16px;
+    width: 36x;
+    height: 36px;
   }
 }
