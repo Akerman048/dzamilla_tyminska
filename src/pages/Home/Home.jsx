@@ -17,19 +17,22 @@ export const Home = () => {
   const sections = ["main", "works", "about", "contacts"];
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
 
-  const handleScroll = (event) => {
-    if (isScrolling) return; // Якщо вже йде скрол — ігноруємо подію
+  const handleScroll = useCallback(
+    (event) => {
+      if (isScrolling) return; // Якщо вже йде скрол — ігноруємо подію
 
-    event.preventDefault();
+      event.preventDefault();
 
-    if (event.deltaY > 0) {
-      scrollToNextSection(); // Скрол вниз
-    } else if (event.deltaY < 0) {
-      scrollToPreviousSection(); // Скрол вгору
-    }
-  };
+      if (event.deltaY > 0) {
+        scrollToNextSection(); // Скрол вниз
+      } else if (event.deltaY < 0) {
+        scrollToPreviousSection(); // Скрол вгору
+      }
+    },
+    [isScrolling, currentSectionIndex] // ✅ Додаємо стабільні залежності
+  );
 
-  const scrollToNextSection = () => {
+  const scrollToNextSection = useCallback(() => {
     if (currentSectionIndex < sections.length - 1) {
       setIsScrolling(true);
       setCurrentSectionIndex((prevIndex) => prevIndex + 1);
@@ -46,9 +49,9 @@ export const Home = () => {
         }, 600); // Час залежить від тривалості анімації
       }
     }
-  };
+  }, [currentSectionIndex, sections]);
 
-  const scrollToPreviousSection = () => {
+  const scrollToPreviousSection = useCallback(() => {
     if (currentSectionIndex > 0) {
       setIsScrolling(true);
       setCurrentSectionIndex((prevIndex) => prevIndex - 1);
@@ -65,7 +68,7 @@ export const Home = () => {
         }, 600); // Час залежить від тривалості анімації
       }
     }
-  };
+  }, [currentSectionIndex, sections]);
 
   // Відстеження поточного компонента через IntersectionObserver
   useEffect(() => {
