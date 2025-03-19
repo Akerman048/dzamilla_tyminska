@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import s from "./Home.module.css";
 
 import { MainSection } from "../../components/MainSection/MainSection";
