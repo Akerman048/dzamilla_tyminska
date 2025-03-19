@@ -186,6 +186,7 @@
 }
 
 .closeButton {
+  width: 48px;
   top: 10px;
   right: 0px;
 }
