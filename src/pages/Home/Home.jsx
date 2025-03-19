@@ -72,7 +72,7 @@ export const Home = () => {
         scrollToPreviousSection(); // Скрол вгору
       }
     },
-    [isScrolling, currentSectionIndex, scrollToNextSection, scrollToPreviousSection] // ✅ Додаємо стабільні залежності
+    [isScrolling, scrollToNextSection, scrollToPreviousSection] // ✅ Додаємо стабільні залежності
   );
 
   // Відстеження поточного компонента через IntersectionObserver
