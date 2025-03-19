@@ -149,6 +149,7 @@ export const AlbumPage = () => {
   const handleOpenImg = (index) => {
     if (photos[index]) {
       setSelectedPhotoIndex(index);
+      document.body.classList.add(s.noScroll);
     }
   };
 
@@ -157,6 +158,7 @@ export const AlbumPage = () => {
     setOffsetX(0);
     setIsDragging(false);
 
+    document.body.classList.remove(s.noScroll);
     // Прибираємо обробники подій при закритті модального вікна
     window.removeEventListener("mousemove", handleMouseMove);
     window.removeEventListener("mouseup", handleMouseUp);
@@ -304,6 +306,21 @@ export const AlbumPage = () => {
 
     setOffsetX(0);
   };
+
+  useEffect(() => {
+    if (selectedPhotoIndex !== null) {
+      // Додаємо клас для блокування прокручування
+      document.body.classList.add(s.noScroll);
+    } else {
+      // Прибираємо клас після закриття
+      document.body.classList.remove(s.noScroll);
+    }
+  
+    // Очищуємо при закритті компонента
+    return () => {
+      document.body.classList.remove(s.noScroll);
+    };
+  }, [selectedPhotoIndex]);
 
   return (
     <>
