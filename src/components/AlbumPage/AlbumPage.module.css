@@ -192,11 +192,10 @@
   cursor: pointer;
 }
 
-
 .prevButton,
 .nextButton {
   font-size: 14px;
-} 
+}
 
 .arrows {
   font-size: 28px;
