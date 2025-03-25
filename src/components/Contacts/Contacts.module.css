@@ -107,3 +107,25 @@
     display: none;
   }
 }
+
+@media screen and (max-width: 990px) {
+  .content {
+    padding: 0px 10px;
+  }
+  .text {
+    font-size: 15px;
+    line-height: 30px;
+  }
+
+  .telNAddress {
+    gap: 35px;
+  }
+  .tel {
+    font-size: 22px;
+  }
+
+  .address {
+    font-size: 18px;
+    line-height: 30px;
+  }
+}
