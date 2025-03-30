@@ -198,8 +198,8 @@ export const AlbumPage = () => {
       setTimeout(() => {
         setIsVisible(true);
         setIsTransitioning(false);
-      }, 20);
-    }, 20);
+      }, 0);
+    }, 0);
   };
   const handleMouseDown = (e) => {
     e.preventDefault();
@@ -257,7 +257,7 @@ export const AlbumPage = () => {
 
   const animateSwipe = (targetOffset, callback) => {
     let startTime;
-    const duration = 200; // Тривалість анімації у мілісекундах
+    const duration = 0; // Тривалість анімації у мілісекундах
     const startOffset = offsetX;
 
     const step = (timestamp) => {
@@ -401,9 +401,9 @@ export const AlbumPage = () => {
         <div className={s.modal} onClick={handleCloseModal}>
           <div
             className={s.modalImageWrapper}
-          ><div className={`${s.imageContainer} ${
-            isVisible ? s.fadeIn : s.hidden
-          }`}>
+          ><div className={`${s.imageContainer} 
+          ${isVisible ? s.fadeIn : s.hidden}
+            `}>
             <img
               src={photos[selectedPhotoIndex].url}
               alt='Full view'

@@ -66,15 +66,15 @@
   top: 50%;
   transform: translateY(-50%);
   right: 50px;
+  z-index: 100;
 }
 
-
-.navPoints a{
+.navPoints a {
   display: block;
   justify-content: center;
 }
 
-.navLine{
+.navLine {
   color: rgba(71, 71, 71, 0.332);
 
   font-size: 30px;
@@ -82,7 +82,7 @@
 
 .navLineActive {
   font-size: 30px;
-  color: black; 
+  color: black;
 }
 .overlay {
   display: flex;
@@ -118,7 +118,8 @@
 .navLinks {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 30px;
+  margin-top: 50px;
 }
 
 .navLinks li {

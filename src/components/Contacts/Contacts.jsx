@@ -1,15 +1,55 @@
 import React, { useState, useEffect } from "react";
 import s from "./Contacts.module.css";
 import { BlockTitle } from "../Elements/BlockTitle/BlockTitle";
-import contacts1 from "../../assets/contacts/1.jpg";
-import contacts2 from "../../assets/contacts/2.jpg";
-import contacts3 from "../../assets/contacts/3.jpg";
+
 import { Footer } from "../Footer/Footer";
+
+
+import { useAuth } from "../../contexts/authContext";
+import { storage, db } from "../../config/firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 export const Contacts = () => {
   const [imgPosition, setImgPosition] = useState({ x: 0, y: 0 });
   const [rotateImg, setRotateImg] = useState({ x: 0, y: 0, scale: 1 });
   const [activeImg, setActiveImg] = useState(null);
+
+  const [img1, setImg1] = useState(null);
+  const [img2, setImg2] = useState(null);
+  const [img3, setImg3] = useState(null);
+
+  const [file1, setFile1] = useState(null);
+  const [file2, setFile2] = useState(null);
+  const [file3, setFile3] = useState(null);
+
+  const { userLoggedIn } = useAuth();
+
+  useEffect(() => {
+    const fetchContactsImages = async () => {
+      const docRef = doc(db, "contactsImages", "images");
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        if (data.img1) setImg1(data.img1);
+        if (data.img2) setImg2(data.img2);
+        if (data.img3) setImg3(data.img3);
+      }
+    };
+    fetchContactsImages();
+  }, []);
+
+  const uploadContactImage = async (file, pathSetter, key) => {
+    if (!file) return;
+    const imgRef = ref(storage, `/dzamilla_tyminska/contacts/${file.name}`);
+    const snapshot = await uploadBytes(imgRef, file);
+    const url = await getDownloadURL(snapshot.ref);
+    pathSetter(url);
+
+    const docRef = doc(db, "contactsImages", "images");
+    await setDoc(docRef, { [key]: url }, { merge: true });
+  };
+
 
   useEffect(() => {
     const handleImgMove = (e) => {
@@ -53,42 +93,53 @@ export const Contacts = () => {
   return (
     <>
       <div className={s.wrap}>
-        <div className={s.img1}>
-          <img
-            alt='contact side 1'
-            src={contacts1}
-            onMouseMove={(e) => handleImageMouseMove(e, "1")}
-            onMouseLeave={handleImageMouseLeave}
-            style={{
+        <div className={s.img1} style={{
               transform: `${
                 activeImg === "1" && window.innerWidth > 960
                   ? `perspective(1000px) translate(${-offsetX}px, ${-offsetY}px) rotateX(${-rotateImg.x}deg) rotateY(${-rotateImg.y}deg) `
                   : `perspective(1000px) translate(${-offsetX}px, ${-offsetY}px)`
               }`,
               transition: "transform 0.1s ease-out",
-            }}
-          />
-        </div>
-        <div className={s.img2}>
+            }}>
           <img
-            alt='contact side 2'
-            src={contacts2}
-            onMouseMove={(e) => handleImageMouseMove(e, "2")}
+            alt='contact side 1'
+            src={img1}
+            onMouseMove={(e) => handleImageMouseMove(e, "1")}
             onMouseLeave={handleImageMouseLeave}
-            style={{
+            
+          />
+           {userLoggedIn && (
+            <div className={`${s.changePhotoLeft} ${s.leftImg}`}>
+              <input type="file" onChange={(e) => setFile1(e.target.files[0])} />
+              <button onClick={() => uploadContactImage(file1, setImg1, "img1")}>
+                Upload left
+              </button>
+            </div>
+          )}
+        </div>
+        <div className={s.img2} style={{
               transform: `${
                 activeImg === "2" && window.innerWidth > 990
                   ? `perspective(1000px) translate(${-offsetX}px, ${-offsetY}px) rotateX(${-rotateImg.x}deg) rotateY(${-rotateImg.y}deg) `
                   : `perspective(1000px) translate(${-offsetX}px, ${-offsetY}px)`
               }`,
-            }}
-          />
-        </div>
-        <div className={s.img3}>
+            }}>
           <img
-            alt='contact side 3'
-            src={contacts3}
-            onMouseMove={(e) => handleImageMouseMove(e, "3")}
+            alt='contact side 2'
+            src={img2}
+            onMouseMove={(e) => handleImageMouseMove(e, "2")}
+            onMouseLeave={handleImageMouseLeave}
+            
+          /> {userLoggedIn && (
+            <div className={s.changePhoto}>
+              <input type="file" onChange={(e) => setFile2(e.target.files[0])} />
+              <button onClick={() => uploadContactImage(file2, setImg2, "img2")}>
+                Upload right up
+              </button>
+            </div>
+          )}
+        </div>
+        <div className={s.img3} onMouseMove={(e) => handleImageMouseMove(e, "3")}
             onMouseLeave={handleImageMouseLeave}
             style={{
               transform: `${
@@ -96,8 +147,19 @@ export const Contacts = () => {
                   ? `perspective(1000px) translate(${offsetX}px, ${offsetY}px) rotateX(${-rotateImg.x}deg) rotateY(${-rotateImg.y}deg) `
                   : `perspective(1000px) translate(${offsetX}px, ${offsetY}px)`
               }`,
-            }}
-          />
+            }}>
+          <img
+            alt='contact side 3'
+            src={img3}
+            
+          /> {userLoggedIn && (
+            <div className={s.changePhoto}>
+              <input type="file" onChange={(e) => setFile3(e.target.files[0])} />
+              <button onClick={() => uploadContactImage(file3, setImg3, "img3")}>
+                Upload right down
+              </button>
+            </div>
+          )}
         </div>
         <BlockTitle title='contacts' />
         <div className={s.content}>
@@ -119,6 +181,7 @@ export const Contacts = () => {
               info@demolink.org
             </a>
           </div>
+         
         </div>
       </div>
       <Footer />
