@@ -99,6 +99,7 @@
 .changePhoto button {
   background-color: rgba(171, 170, 170, 0.589);
   border: none;
+  color: black;
 }
 input[type="file"] {
   appearance: none;
