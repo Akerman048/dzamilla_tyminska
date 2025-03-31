@@ -120,10 +120,12 @@ export const MainSection = () => {
               }}
             >
               <input
+              className={s.changePhotoInput}
                 type='file'
                 onChange={(e) => setMainImgFile(e.target.files[0])}
               />
               <button
+              className={changePhotoButton}
                 onClick={() => uploadImage(mainImgFile, setMainImg, "mainImg")}
               >
                 Upload Main
@@ -164,10 +166,12 @@ export const MainSection = () => {
               }}
             >
               <input
+              className={s.changePhotoInput}
                 type='file'
                 onChange={(e) => setSideImgFile(e.target.files[0])}
               />
               <button
+              className={changePhotoButton}
                 onClick={() => uploadImage(sideImgFile, setSideImg, "sideImg")}
               >
                 Upload Side
@@ -206,10 +210,12 @@ export const MainSection = () => {
               }}
             >
               <input
+              className={s.changePhotoInput}
                 type='file'
                 onChange={(e) => setSmallImgFile(e.target.files[0])}
               />
               <button
+              className={changePhotoButton}
                 onClick={() =>
                   uploadImage(smallImgFile, setSmallImg, "smallImg")
                 }
