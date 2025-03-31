@@ -15,6 +15,7 @@
     rgb(237, 237, 237)
   );
   padding: 10px;
+  
 }
 
 .footer p {
@@ -22,12 +23,14 @@
   color: rgb(72, 71, 71);
   font-weight: 400;
   font-size: 14px;
+  margin-top: 5px;
 }
 
 .social {
   display: flex;
   justify-content: center;
   gap: 30px;
+  
   padding: 3px;
 }
 

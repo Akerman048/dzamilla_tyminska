@@ -143,6 +143,11 @@
   color: rgb(68, 68, 68);
 }
 
+.deleteAlbumIcon{
+  display: flex;
+  z-index: 9;
+}
+
 .title {
   position: absolute;
   z-index: 100;

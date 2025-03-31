@@ -4,7 +4,6 @@ import { BlockTitle } from "../Elements/BlockTitle/BlockTitle";
 
 import { Footer } from "../Footer/Footer";
 
-
 import { useAuth } from "../../contexts/authContext";
 import { storage, db } from "../../config/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -23,7 +22,25 @@ export const Contacts = () => {
   const [file2, setFile2] = useState(null);
   const [file3, setFile3] = useState(null);
 
+  const [contactData, setContactData] = useState({
+    paragraph: "",
+    phone: "",
+    address: "",
+    email: "",
+  });
+
   const { userLoggedIn } = useAuth();
+
+  useEffect(() => {
+    const fetchContent = async () => {
+      const docRef = doc(db, "contactsContent", "text");
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setContactData(docSnap.data());
+      }
+    };
+    fetchContent();
+  }, []);
 
   useEffect(() => {
     const fetchContactsImages = async () => {
@@ -49,7 +66,6 @@ export const Contacts = () => {
     const docRef = doc(db, "contactsImages", "images");
     await setDoc(docRef, { [key]: url }, { merge: true });
   };
-
 
   useEffect(() => {
     const handleImgMove = (e) => {
@@ -93,69 +109,89 @@ export const Contacts = () => {
   return (
     <>
       <div className={s.wrap}>
-        <div className={s.img1} style={{
-              transform: `${
-                activeImg === "1" && window.innerWidth > 960
-                  ? `perspective(1000px) translate(${-offsetX}px, ${-offsetY}px) rotateX(${-rotateImg.x}deg) rotateY(${-rotateImg.y}deg) `
-                  : `perspective(1000px) translate(${-offsetX}px, ${-offsetY}px)`
-              }`,
-              transition: "transform 0.1s ease-out",
-            }}>
+        <div
+          className={s.img1}
+          style={{
+            transform: `${
+              activeImg === "1" && window.innerWidth > 960
+                ? `perspective(1000px) translate(${-offsetX}px, ${-offsetY}px) rotateX(${-rotateImg.x}deg) rotateY(${-rotateImg.y}deg) `
+                : `perspective(1000px) translate(${-offsetX}px, ${-offsetY}px)`
+            }`,
+            transition: "transform 0.1s ease-out",
+          }}
+        >
           <img
             alt='contact side 1'
             src={img1}
             onMouseMove={(e) => handleImageMouseMove(e, "1")}
             onMouseLeave={handleImageMouseLeave}
-            
           />
-           {userLoggedIn && (
+          {userLoggedIn && (
             <div className={`${s.changePhotoLeft} ${s.leftImg}`}>
-              <input type="file" onChange={(e) => setFile1(e.target.files[0])} />
-              <button onClick={() => uploadContactImage(file1, setImg1, "img1")}>
+              <input
+                type='file'
+                onChange={(e) => setFile1(e.target.files[0])}
+              />
+              <button
+                onClick={() => uploadContactImage(file1, setImg1, "img1")}
+              >
                 Upload left
               </button>
             </div>
           )}
         </div>
-        <div className={s.img2} style={{
-              transform: `${
-                activeImg === "2" && window.innerWidth > 990
-                  ? `perspective(1000px) translate(${-offsetX}px, ${-offsetY}px) rotateX(${-rotateImg.x}deg) rotateY(${-rotateImg.y}deg) `
-                  : `perspective(1000px) translate(${-offsetX}px, ${-offsetY}px)`
-              }`,
-            }}>
+        <div
+          className={s.img2}
+          style={{
+            transform: `${
+              activeImg === "2" && window.innerWidth > 990
+                ? `perspective(1000px) translate(${-offsetX}px, ${-offsetY}px) rotateX(${-rotateImg.x}deg) rotateY(${-rotateImg.y}deg) `
+                : `perspective(1000px) translate(${-offsetX}px, ${-offsetY}px)`
+            }`,
+          }}
+        >
           <img
             alt='contact side 2'
             src={img2}
             onMouseMove={(e) => handleImageMouseMove(e, "2")}
             onMouseLeave={handleImageMouseLeave}
-            
-          /> {userLoggedIn && (
+          />{" "}
+          {userLoggedIn && (
             <div className={s.changePhoto}>
-              <input type="file" onChange={(e) => setFile2(e.target.files[0])} />
-              <button onClick={() => uploadContactImage(file2, setImg2, "img2")}>
+              <input
+                type='file'
+                onChange={(e) => setFile2(e.target.files[0])}
+              />
+              <button
+                onClick={() => uploadContactImage(file2, setImg2, "img2")}
+              >
                 Upload right up
               </button>
             </div>
           )}
         </div>
-        <div className={s.img3} onMouseMove={(e) => handleImageMouseMove(e, "3")}
-            onMouseLeave={handleImageMouseLeave}
-            style={{
-              transform: `${
-                activeImg === "3" && window.innerWidth > 990
-                  ? `perspective(1000px) translate(${offsetX}px, ${offsetY}px) rotateX(${-rotateImg.x}deg) rotateY(${-rotateImg.y}deg) `
-                  : `perspective(1000px) translate(${offsetX}px, ${offsetY}px)`
-              }`,
-            }}>
-          <img
-            alt='contact side 3'
-            src={img3}
-            
-          /> {userLoggedIn && (
+        <div
+          className={s.img3}
+          onMouseMove={(e) => handleImageMouseMove(e, "3")}
+          onMouseLeave={handleImageMouseLeave}
+          style={{
+            transform: `${
+              activeImg === "3" && window.innerWidth > 990
+                ? `perspective(1000px) translate(${offsetX}px, ${offsetY}px) rotateX(${-rotateImg.x}deg) rotateY(${-rotateImg.y}deg) `
+                : `perspective(1000px) translate(${offsetX}px, ${offsetY}px)`
+            }`,
+          }}
+        >
+          <img alt='contact side 3' src={img3} />{" "}
+          {userLoggedIn && (
             <div className={s.changePhoto}>
-              <input type="file" onChange={(e) => setFile3(e.target.files[0])} />
-              <button onClick={() => uploadContactImage(file3, setImg3, "img3")}>
+              <input
+                type='file'
+                onChange={(e) => setFile3(e.target.files[0])}
+              />
+              <button
+                onClick={() => uploadContactImage(file3, setImg3, "img3")}
+              >
                 Upload right down
               </button>
             </div>
@@ -163,25 +199,64 @@ export const Contacts = () => {
         </div>
         <BlockTitle title='contacts' />
         <div className={s.content}>
-          <p className={s.text}>
-            Tell me about your story, your passion, your love.
-            <br /> And I'll be happy to get back to you and talk about our
-            common project. Let's connect here.
-          </p>
+          {userLoggedIn ? (
+            <textarea
+              className={s.textArea}
+              value={contactData.paragraph}
+              onChange={(e) =>
+                setContactData({ ...contactData, paragraph: e.target.value })
+              }
+            />
+          ) : (
+            <p className={s.text}>{contactData.paragraph}</p>
+          )}
           <div className={s.telNAddress}>
-            <a className={s.tel} href='tel:+125610870000'>
-              +1 256 10 87 0000
-            </a>
-            <span className={s.address}>
-              4401 Waldeck Street Grapevine, Nashville, TX 76051
-            </span>
+            {userLoggedIn ? (
+              <input
+                className={s.input}
+                value={contactData.phone}
+                onChange={(e) =>
+                  setContactData({ ...contactData, phone: e.target.value })
+                }
+              />
+            ) : (
+              <a className={s.tel} href={`tel:${contactData.phone}`}>
+                {contactData.phone}
+              </a>
+            )}
+            {userLoggedIn ? (<input
+                className={s.input}
+                value={contactData.address}
+                onChange={(e) =>
+                  setContactData({ ...contactData, address: e.target.value })
+                }
+              />) : (<span className={s.address}>
+              {contactData.address}
+            </span>)}
           </div>
           <div>
-            <a className={s.email} href='info@demolink.org'>
-              info@demolink.org
-            </a>
+            {userLoggedIn ? (<input
+                className={s.input}
+                value={contactData.email}
+                onChange={(e) =>
+                  setContactData({ ...contactData, email: e.target.value })
+                }
+              />) : (<a className={s.email} href={`${contactData.email}`}>
+              {contactData.email}
+            </a>)}
           </div>
-         
+          {userLoggedIn && (
+            <button
+            className={s.button}
+              onClick={async () => {
+                const docRef = doc(db, "contactsContent", "text");
+                await setDoc(docRef, contactData, { merge: true });
+                alert("Contact details updated!");
+              }}
+            >
+              Save changes
+            </button>
+          )}
         </div>
       </div>
       <Footer />

@@ -252,7 +252,7 @@ export const Works = () => {
                     onClick={(e) => handleDelete(e, album)}
                     className={s.deleteAlbum}
                   >
-                    <MdClose />
+                    <MdClose  className={s.deleteAlbumIcon}/>
                   </button>
                 )}
               </div>
