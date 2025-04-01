@@ -92,7 +92,7 @@ export const About = () => {
             transform: `${
               activeImg === "1" && window.innerWidth > 960
                 ? `perspective(1000px) translate(${-offsetX}px, ${-offsetY}px) rotateX(${-rotateImg.x}deg) rotateY(${-rotateImg.y}deg) `
-                : `perspective(1000px) translate(${-offsetX}px, ${offsetY}px)`
+                : `perspective(1000px) translate(${-offsetX}px, ${-offsetY}px)`
             }`,
             transition: "transform 0.1s ease-out",
           }}>
@@ -160,7 +160,7 @@ export const About = () => {
                 ? `perspective(1000px) translate(${offsetX}px, ${offsetY}px) rotateX(${-rotateImg.x}deg) rotateY(${
                     rotateImg.y
                   }deg) `
-                : `perspective(1000px) translate(${offsetX}px, ${offsetY}px)`
+                : `perspective(1000px) translate(${-offsetX}px, ${-offsetY}px)`
             }`,
           }}>
         <img

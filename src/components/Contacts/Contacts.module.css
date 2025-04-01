@@ -9,36 +9,37 @@
 .img1 {
   max-width: 450px;
   width: 100%;
-  max-height:300px;
+  max-height: 300px;
   height: 100%;
   position: absolute;
   left: 0px;
   bottom: 100px;
 }
 
-.img1 img{
+.img1 img {
   width: 100%;
   height: 100%;
 }
 
-.changePhotoLeft{
+.changePhotoLeft {
   right: 0;
   top: 0;
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    max-width: 87px;
-    top: 10px;
-    z-index: 100;
-    overflow: hidden;
-  
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  max-width: 87px;
+  top: 10px;
+  z-index: 100;
+  overflow: hidden;
 }
-.changePhotoLeft input,  .changePhotoLeft button{
+.changePhotoLeft input,
+.changePhotoLeft button {
   background-color: rgba(171, 170, 170, 0.589);
   border: none;
 }
 
-.changePhoto input,  .changePhoto button{
+.changePhoto input,
+.changePhoto button {
   background-color: rgba(171, 170, 170, 0.589);
   border: none;
 }
@@ -50,10 +51,9 @@
   max-width: 87px;
   top: 10px;
   left: 0px;
-  z-index: 100;
+  z-index: 102;
   overflow: hidden;
 }
-
 
 .img2 {
   max-width: 250px;
@@ -77,14 +77,15 @@
   width: 100%;
   max-height: 280px;
   height: 100%;
-  right:140px;
+  right: 140px;
   bottom: 70px;
   opacity: 0.7;
+  z-index: 101;
 }
 
-.img3::before{
+.img3::before {
   position: absolute;
-  content: '';
+  content: "";
   background-color: white;
   left: 0;
   right: 0;
@@ -113,7 +114,7 @@
   z-index: 100;
 }
 
-.textArea{
+.textArea {
   max-width: 500px;
   width: 100%;
   max-height: 200px;
@@ -121,17 +122,17 @@
   border: none;
   padding: 10px;
   resize: none;
-  -webkit-box-shadow: 1px 1px 1px 1px rgba(230,230,230,1);
--moz-box-shadow: 1px 1px 1px 1px rgba(230,230,230,1);
-box-shadow: 1px 1px 1px 1px rgba(230,230,230,1);
+  -webkit-box-shadow: 1px 1px 1px 1px rgba(230, 230, 230, 1);
+  -moz-box-shadow: 1px 1px 1px 1px rgba(230, 230, 230, 1);
+  box-shadow: 1px 1px 1px 1px rgba(230, 230, 230, 1);
 }
 
-.input{
+.input {
   border: none;
   padding: 5px;
-  -webkit-box-shadow: 1px 1px 1px 1px rgba(230,230,230,1);
--moz-box-shadow: 1px 1px 1px 1px rgba(230,230,230,1);
-box-shadow: 1px 1px 1px 1px rgba(230,230,230,1);
+  -webkit-box-shadow: 1px 1px 1px 1px rgba(230, 230, 230, 1);
+  -moz-box-shadow: 1px 1px 1px 1px rgba(230, 230, 230, 1);
+  box-shadow: 1px 1px 1px 1px rgba(230, 230, 230, 1);
 }
 
 .text {
@@ -176,11 +177,11 @@ box-shadow: 1px 1px 1px 1px rgba(230,230,230,1);
   transition: 0.3s ease;
 }
 
-.social{
+.social {
   font-size: 26px;
 }
 
-.social:hover{
+.social:hover {
   color: rgb(123, 123, 123);
 }
 
@@ -189,12 +190,11 @@ box-shadow: 1px 1px 1px 1px rgba(230,230,230,1);
   border-bottom: 2px solid rgb(123, 123, 123);
 }
 
-.button{
+.button {
   border: none;
   padding: 5px;
   background-color: rgb(189, 189, 189);
 }
-
 
 @media screen and (max-width: 1280px) {
   .wrap {
