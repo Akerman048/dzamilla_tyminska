@@ -11,7 +11,7 @@
   position: absolute;
   left: 0;
   top: 0;
-
+  z-index: 101;
   max-width: 150px;
 }
 
@@ -28,7 +28,7 @@
   right: 0;
   bottom: 300px;
   opacity: 0.7;
-  z-index: 1;
+  z-index: 101;
 }
 
 .img2 img {
@@ -56,10 +56,8 @@
   height: 100%;
   right: 0px;
   bottom: 10px;
-  
+  z-index: 101;
 }
-
-
 
 .img3 img {
   width: 100%;
@@ -78,16 +76,16 @@
   overflow: hidden;
 }
 
-.img2 .changePhoto, .img3 .changePhoto {
+.img2 .changePhoto,
+.img3 .changePhoto {
   left: 0;
- 
 }
 
-.changePhoto input,  .changePhoto button{
+.changePhoto input,
+.changePhoto button {
   background-color: rgba(171, 170, 170, 0.589);
   border: none;
 }
-
 
 .content {
   display: flex;
@@ -116,7 +114,6 @@
   font-size: 20px;
   color: rgb(66, 66, 66);
   padding: 0px 15px;
-  
 }
 
 .img {

@@ -14,6 +14,7 @@
   position: absolute;
   left: 0px;
   bottom: 100px;
+  z-index: 101;
 }
 
 .img1 img {
@@ -63,6 +64,7 @@
   position: absolute;
   right: 70px;
   top: 100px;
+  z-index: 101;
 }
 
 .img2 img {
