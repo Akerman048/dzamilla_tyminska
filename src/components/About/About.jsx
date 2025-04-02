@@ -157,8 +157,8 @@ export const About = () => {
       <div className={s.img3} style={{
             transform: `${
               activeImg === "3" && window.innerWidth > 990
-                ? `perspective(1000px) translate(${offsetX}px, ${offsetY}px) rotateX(${-rotateImg.x}deg) rotateY(${
-                    rotateImg.y
+                ? `perspective(1000px) translate(${-offsetX}px, ${-offsetY}px) rotateX(${-rotateImg.x}deg) rotateY(${
+                    -rotateImg.y
                   }deg) `
                 : `perspective(1000px) translate(${-offsetX}px, ${-offsetY}px)`
             }`,
