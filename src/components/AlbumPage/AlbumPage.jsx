@@ -234,14 +234,14 @@ export const AlbumPage = () => {
     // Перемикання на наступне фото, якщо поріг перевищено
     if (offsetX > swipeThreshold) {
       animateSwipe(window.innerWidth, () => {
-        showNextPhoto();
+        showPrevPhoto();
         setOffsetX(0);
       });
     }
     // Перемикання на попереднє фото, якщо поріг перевищено
     else if (offsetX < -swipeThreshold) {
       animateSwipe(-window.innerWidth, () => {
-        showPrevPhoto();
+        showNextPhoto();
         setOffsetX(0);
       });
     }
@@ -299,9 +299,9 @@ export const AlbumPage = () => {
     setIsDragging(false);
 
     if (offsetX > swipeThreshold) {
-      showNextPhoto(); // Свайп праворуч → наступне фото
+      showPrevPhoto(); // Свайп праворуч → наступне фото
     } else if (offsetX < -swipeThreshold) {
-      showPrevPhoto(); // Свайп ліворуч → попереднє фото
+      showNextPhoto(); // Свайп ліворуч → попереднє фото
     }
 
     setOffsetX(0);
