@@ -15,6 +15,8 @@ import {
   doc,
   // updateDoc,
   deleteDoc,
+  query,
+  orderBy,
 } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { IoIosArrowBack } from "react-icons/io";
@@ -56,8 +58,8 @@ export const Works = () => {
 
   useEffect(() => {
     const fetchAlbums = async () => {
-      const snapshot = await getDocs(albumsCollectionRef);
-      // setAlbumCount(snapshot.size);
+      const albumsQuery = query(albumsCollectionRef, orderBy("createdAt", "desc"));
+      const snapshot = await getDocs(albumsQuery);
       const albumsData = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
@@ -123,6 +125,7 @@ export const Works = () => {
     const newAlbumRef = await addDoc(albumsCollectionRef, {
       name: albumName,
       cover: url,
+      createdAt: new Date(),
     });
     setAlbums((prev) => [
       ...prev,

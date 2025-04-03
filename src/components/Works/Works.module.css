@@ -13,6 +13,10 @@
   margin-bottom: 10px;
 }
 
+input[type="file"] {
+  color: rgb(74, 74, 74);
+}
+
 .inputFile {
   border: none;
   background-color: transparent;
@@ -86,10 +90,11 @@
 .image {
   width: 400px;
   height: 260px;
-  padding: 5px;
+  padding: 15px;
   z-index: 1;
   position: relative;
   transition: filter 0.3s ease;
+  object-fit: cover;
 }
 
 .image img {
@@ -116,8 +121,8 @@
 
 .deleteAlbum {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 15px;
+  right: 15px;
   font-size: 22px;
   background-color: rgba(240, 248, 255, 0.303);
   border: none;
@@ -144,7 +149,7 @@
   color: rgb(68, 68, 68);
 }
 
-.deleteAlbumIcon{
+.deleteAlbumIcon {
   font-size: 22px;
   display: flex;
   z-index: 12;
@@ -184,7 +189,6 @@
   .albumWrap {
     max-width: 30vw;
     width: 100%;
-    
   }
 
   .image {
