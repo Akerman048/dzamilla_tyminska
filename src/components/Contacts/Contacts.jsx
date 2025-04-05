@@ -3,7 +3,8 @@ import s from "./Contacts.module.css";
 import { BlockTitle } from "../Elements/BlockTitle/BlockTitle";
 
 import { Footer } from "../Footer/Footer";
-
+import { FaInstagram } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/authContext";
 import { storage, db } from "../../config/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -224,30 +225,36 @@ export const Contacts = () => {
                 {contactData.phone}
               </a>
             )}
-            {userLoggedIn ? (<input
+            {userLoggedIn ? (
+              <input
                 className={s.input}
                 value={contactData.address}
                 onChange={(e) =>
                   setContactData({ ...contactData, address: e.target.value })
                 }
-              />) : (<span className={s.address}>
-              {contactData.address}
-            </span>)}
+              />
+            ) : (
+              <span className={s.address}>{contactData.address}</span>
+            )}
           </div>
           <div>
-            {userLoggedIn ? (<input
+            {userLoggedIn ? (
+              <input
                 className={s.input}
                 value={contactData.email}
                 onChange={(e) =>
                   setContactData({ ...contactData, email: e.target.value })
                 }
-              />) : (<a className={s.email} href={`${contactData.email}`}>
-              {contactData.email}
-            </a>)}
+              />
+            ) : (
+              <a className={s.email} href={`${contactData.email}`}>
+                {contactData.email}
+              </a>
+            )}
           </div>
           {userLoggedIn && (
             <button
-            className={s.button}
+              className={s.button}
               onClick={async () => {
                 const docRef = doc(db, "contactsContent", "text");
                 await setDoc(docRef, contactData, { merge: true });
@@ -258,6 +265,9 @@ export const Contacts = () => {
             </button>
           )}
         </div>
+        <Link to='https://www.instagram.com/d.cattleya/?fbclid=IwY2xjawIDKepleHRuA2FlbQIxMAABHR8x4009B-T7IDHMQT8LbjHuFod-WEQdcYgX9WXyt7hNTtRQOT157oKUew_aem_Hb4bxSMvRE1Q2UG3jKLxxw#'>
+          <FaInstagram className={s.socialIcon} />
+        </Link>
       </div>
       <Footer />
     </>

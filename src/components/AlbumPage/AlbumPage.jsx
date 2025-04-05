@@ -17,6 +17,8 @@ import {
   doc,
   updateDoc,
   deleteDoc,
+  serverTimestamp,
+  orderBy,
 } from "firebase/firestore";
 import { MdClose } from "react-icons/md";
 import { useAuth } from "../../contexts/authContext";
@@ -67,7 +69,9 @@ export const AlbumPage = () => {
 
       const photosQuery = query(
         photosCollectionRef,
-        where("album", "==", albumName)
+        where("album", "==", albumName),
+        where("createdAt", "!=", null),
+        orderBy("createdAt", "desc")
       );
       const photosSnapshot = await getDocs(photosQuery);
       const photosData = photosSnapshot.docs.map((doc) => ({
@@ -93,9 +97,11 @@ export const AlbumPage = () => {
     const snapshot = await uploadBytes(imageRef, imageUpload);
     const url = await getDownloadURL(snapshot.ref);
 
-    await addDoc(photosCollectionRef, { url, album: albumName });
+    await addDoc(photosCollectionRef, { url, album: albumName,  createdAt: serverTimestamp(), });
     setPhotos((prev) => [...prev, { url }]);
   };
+
+  
 
   // Оновлення головного фото
   const changeMainPhoto = async (photoUrl) => {
@@ -123,7 +129,7 @@ export const AlbumPage = () => {
       // Отримуємо фото з Firestore, щоб знайти його `id`
       const photosQuery = query(
         photosCollectionRef,
-        where("url", "==", photoUrl)
+        where("url", "==", photoUrl), orderBy("createdAt", "asc") 
       );
       const photosSnapshot = await getDocs(photosQuery);
 
@@ -322,6 +328,17 @@ export const AlbumPage = () => {
     };
   }, [selectedPhotoIndex]);
 
+  const flattenedPhotos = [];
+  const maxLength = Math.max(columns[0].length, columns[1].length, columns[2].length);
+  
+  for (let i = 0; i < maxLength; i++) {
+    for (let col = 0; col < 3; col++) {
+      if (columns[col][i]) {
+        flattenedPhotos.push(columns[col][i]);
+      }
+    }
+  }
+
   return (
     <>
       <SideNav sideLines={false}/>
@@ -371,7 +388,7 @@ export const AlbumPage = () => {
                       className={s.image}
                       src={photo.url}
                       alt='photoContainer'
-                      onClick={() => handleOpenImg(globalIndex)} // Передаємо глобальний індекс
+                      onClick={() => handleOpenImg(photos.findIndex(p => p.url === photo.url))} // Передаємо глобальний індекс
                     />
                     {userLoggedIn && (
                       <button
@@ -395,6 +412,18 @@ export const AlbumPage = () => {
             </div>
           ))}
         </div>
+        <div className={`${s.masonryGrid} ${s.mobileGrid}`}>
+  {flattenedPhotos.map((photo, index) => (
+    <div key={photo.url} className={s.photoContainer}>
+      <img
+        className={s.image}
+        src={photo.url}
+        alt='photo'
+        onClick={() => handleOpenImg(index)}
+      />
+    </div>
+  ))}
+</div>
       </div>
 
       {selectedPhotoIndex !== null && photos[selectedPhotoIndex] && (

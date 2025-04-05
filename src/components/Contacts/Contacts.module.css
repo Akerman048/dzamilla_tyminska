@@ -81,20 +81,10 @@
   height: 100%;
   right: 140px;
   bottom: 70px;
-  opacity: 0.7;
   z-index: 101;
 }
 
-.img3::before {
-  position: absolute;
-  content: "";
-  background-color: white;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  z-index: -1;
-}
+
 
 .img3 img {
   width: 100%;
@@ -199,7 +189,7 @@
   background-color: rgb(189, 189, 189);
 }
 
-@media screen and (max-width: 1280px) {
+@media screen and (max-width: 1279px) {
   .wrap {
     margin-bottom: 50px;
   }

@@ -260,10 +260,24 @@
   height: 100%; /* Заборона прокручування на мобільних пристроях */
 }
 
+.desktopGrid {
+  display: flex;
+  gap: 16px;
+}
+
+.mobileGrid {
+  display: none;
+  flex-direction: column;
+}
+
+
 @media screen and (max-width: 1025px) {
   .masonryGrid {
-    display: flex;
+    display: none;
     flex-direction: column;
+  }
+  .mobileGrid {
+    display: flex;
   }
 
   .prevButton,
@@ -272,7 +286,17 @@
   }
 }
 
-@media screen and (max-width: 570px) {
+/* @media screen and (max-width: 768px) {
+  .masonryGrid {
+    display: none;
+  }
+
+  .mobileGrid {
+    display: flex;
+  }
+} */
+
+/* @media screen and (max-width: 570px) {
   .masonryGrid {
     display: flex;
     flex-direction: column;
@@ -282,7 +306,7 @@
   .nextButton {
     bottom: 50px;
   }
-}
+} */
 
 @media screen and (max-width: 570px) {
   .closeButton {

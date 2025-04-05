@@ -44,15 +44,18 @@ export const SideNav = ({ activeSection, sideLines }) => {
         </ul>
       )}
       {isOpen && (
-        <div className={s.overlay}>
+        <div className={s.overlay} onClick={() => setIsOpen(false)}>
           <div>
-            <h1
-              className={s.name}
-            >
-              <a href='#main' onClick={() => {
-                setIsOpen(!isOpen);
-                navigate("/#main");
-              }}>Dżamilla Tymińska </a>
+            <h1 className={s.name}>
+              <a
+                href='#main'
+                onClick={() => {
+                  setIsOpen(!isOpen);
+                  navigate("/#main");
+                }}
+              >
+                Dżamilla Tymińska{" "}
+              </a>
             </h1>
             <span className={s.subtitle}>creative photography</span>
           </div>

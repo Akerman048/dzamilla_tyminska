@@ -20,9 +20,29 @@ export const About = () => {
   const [rightDownFile, setRightDownFile] = useState(null);
   const [rightUpFile, setRightUpFile] = useState(null);
 
+  const [aboutText, setAboutText] = useState("");
+
   const { userLoggedIn } = useAuth();
 
-    useEffect(() => {
+  useEffect(() => {
+    const fetchAboutText = async () => {
+      const docRef = doc(db, "aboutContent", "about");
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        if (data.text) setAboutText(data.text);
+      }
+    };
+
+    fetchAboutText();
+  }, []);
+
+  const saveAboutText = async () => {
+    const docRef = doc(db, "aboutContent", "about");
+    await setDoc(docRef, { text: aboutText }, { merge: true });
+  };
+
+  useEffect(() => {
     const fetchImages = async () => {
       const docRef = doc(db, "aboutImages", "images");
       const docSnap = await getDoc(docRef);
@@ -88,62 +108,66 @@ export const About = () => {
   const offsetY = (imgPosition.y - window.innerHeight / 2) / 20;
   return (
     <div className={s.container}>
-      <div className={s.img1}  style={{
-            transform: `${
-              activeImg === "1" && window.innerWidth > 960
-                ? `perspective(1000px) translate(${-offsetX}px, ${-offsetY}px) rotateX(${-rotateImg.x}deg) rotateY(${-rotateImg.y}deg) `
-                : `perspective(1000px) translate(${-offsetX}px, ${-offsetY}px)`
-            }`,
-            transition: "transform 0.1s ease-out",
-          }}>
+      <div
+        className={s.img1}
+        style={{
+          transform: `${
+            activeImg === "1" && window.innerWidth > 960
+              ? `perspective(1000px) translate(${-offsetX}px, ${-offsetY}px) rotateX(${-rotateImg.x}deg) rotateY(${-rotateImg.y}deg) `
+              : `perspective(1000px) translate(${-offsetX}px, ${-offsetY}px)`
+          }`,
+          transition: "transform 0.1s ease-out",
+        }}
+      >
         <img
           alt='about side 1'
           src={left}
           onMouseMove={(e) => handleImageMouseMove(e, "1")}
           onMouseLeave={handleImageMouseLeave}
-         
         />
-         {userLoggedIn && (
-            <div className={s.changePhoto} onMouseMove={(e) => handleImageMouseMove(e, "main")}
+        {userLoggedIn && (
+          <div
+            className={s.changePhoto}
+            onMouseMove={(e) => handleImageMouseMove(e, "main")}
             onMouseLeave={handleImageMouseLeave}
             style={{
-              
               transition: "transform 0.1s ease-out",
-            }}>
-              <input
-                type="file"
-                onChange={(e) => setLeftFile(e.target.files[0])}
-              />
-              <button
-                onClick={() => uploadImage(leftFile, setLeft, "left")}
-              >
-                Upload left
-              </button>
-            </div>
-          )}
-      </div>
-      <div className={s.img2} onMouseMove={(e) => handleImageMouseMove(e, "2")}
-          onMouseLeave={handleImageMouseLeave}
-          style={{
-            transform: `${
-              activeImg === "2" && window.innerWidth > 990
-                ? `perspective(1000px) translate(${offsetX}px, ${offsetY}px) rotateX(${-rotateImg.x}deg) rotateY(${-rotateImg.y}deg) `
-                : `perspective(1000px) translate(${offsetX}px, ${offsetY}px)`
-            }`,
-          }}>
-        <img
-          alt='about side 2'
-          src={rightUp}
-          
-        />{userLoggedIn && (
-          <div className={s.changePhoto} onMouseMove={(e) => handleImageMouseMove(e, "main")}
-          onMouseLeave={handleImageMouseLeave}
-          style={{
-            
-            transition: "transform 0.1s ease-out",
-          }}>
+            }}
+          >
             <input
-              type="file"
+              type='file'
+              onChange={(e) => setLeftFile(e.target.files[0])}
+            />
+            <button onClick={() => uploadImage(leftFile, setLeft, "left")}>
+              Upload left
+            </button>
+          </div>
+        )}
+      </div>
+      <div
+        className={s.img2}
+        onMouseMove={(e) => handleImageMouseMove(e, "2")}
+        onMouseLeave={handleImageMouseLeave}
+        style={{
+          transform: `${
+            activeImg === "2" && window.innerWidth > 990
+              ? `perspective(1000px) translate(${offsetX}px, ${offsetY}px) rotateX(${-rotateImg.x}deg) rotateY(${-rotateImg.y}deg) `
+              : `perspective(1000px) translate(${offsetX}px, ${offsetY}px)`
+          }`,
+        }}
+      >
+        <img alt='about side 2' src={rightUp} />
+        {userLoggedIn && (
+          <div
+            className={s.changePhoto}
+            onMouseMove={(e) => handleImageMouseMove(e, "main")}
+            onMouseLeave={handleImageMouseLeave}
+            style={{
+              transition: "transform 0.1s ease-out",
+            }}
+          >
+            <input
+              type='file'
               onChange={(e) => setRightUpFile(e.target.files[0])}
             />
             <button
@@ -154,34 +178,39 @@ export const About = () => {
           </div>
         )}
       </div>
-      <div className={s.img3} style={{
-            transform: `${
-              activeImg === "3" && window.innerWidth > 990
-                ? `perspective(1000px) translate(${-offsetX}px, ${-offsetY}px) rotateX(${-rotateImg.x}deg) rotateY(${
-                    -rotateImg.y
-                  }deg) `
-                : `perspective(1000px) translate(${-offsetX}px, ${-offsetY}px)`
-            }`,
-          }}>
+      <div
+        className={s.img3}
+        style={{
+          transform: `${
+            activeImg === "3" && window.innerWidth > 990
+              ? `perspective(1000px) translate(${-offsetX}px, ${-offsetY}px) rotateX(${-rotateImg.x}deg) rotateY(${-rotateImg.y}deg) `
+              : `perspective(1000px) translate(${-offsetX}px, ${-offsetY}px)`
+          }`,
+        }}
+      >
         <img
           alt='about side 3'
           src={rightDown}
           onMouseMove={(e) => handleImageMouseMove(e, "3")}
           onMouseLeave={handleImageMouseLeave}
-          
-        />{userLoggedIn && (
-          <div className={`${s.changePhoto} ${s.reverse}`} onMouseMove={(e) => handleImageMouseMove(e, "main")}
-          onMouseLeave={handleImageMouseLeave}
-          style={{
-            
-            transition: "transform 0.1s ease-out",
-          }}>
+        />
+        {userLoggedIn && (
+          <div
+            className={`${s.changePhoto} ${s.reverse}`}
+            onMouseMove={(e) => handleImageMouseMove(e, "main")}
+            onMouseLeave={handleImageMouseLeave}
+            style={{
+              transition: "transform 0.1s ease-out",
+            }}
+          >
             <input
-              type="file"
+              type='file'
               onChange={(e) => setRightDownFile(e.target.files[0])}
             />
             <button
-              onClick={() => uploadImage(rightDownFile, setRightDown, "rightDown")}
+              onClick={() =>
+                uploadImage(rightDownFile, setRightDown, "rightDown")
+              }
             >
               Upload right down
             </button>
@@ -191,20 +220,21 @@ export const About = () => {
       <BlockTitle title='About' />
       <div className={s.content}>
         <h2 className={s.title}>Dżamilla Tymińska</h2>
-        <div>
-          <p className={s.text}>
-            I specialize in lifestyle and travel photography. I not only shoot
-            in and around the streets of the city, but also in apartments,
-            shops, parks – anywhere and everywhere my clients FEEL happy.
-            Finding places that make people feel happy, as well as creating
-            memories while we shoot. And that is what makes great photos!
-            <p>
-              My work in photography is a natural extension of my desire to tell
-              stories. I’ve always been a nostalgic and romantic person, and I
-              love that my work allows me to express those traits in such a
-              meaningful way.
-            </p>
-          </p>
+        <div className={s.textWrap}>
+          {userLoggedIn ? (
+            <>
+              <textarea
+                className={s.textArea}
+                value={aboutText}
+                onChange={(e) => setAboutText(e.target.value)}
+              />
+              <button onClick={saveAboutText} className={s.saveButton}>
+                Save
+              </button>
+            </>
+          ) : (
+            <p className={s.text}>{aboutText}</p>
+          )}
         </div>
         <div className={s.img}>
           <img alt='about' src={rightDown} />

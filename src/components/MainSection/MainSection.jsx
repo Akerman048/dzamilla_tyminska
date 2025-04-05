@@ -181,20 +181,22 @@ export const MainSection = () => {
         </div>
 
         {/* Small Image */}
-        <div
-          className={s.homeSmallImgWrap}
-          onMouseMove={(e) => handleImageMouseMove(e, "small")}
-          onMouseLeave={handleImageMouseLeave}
-          style={{
-            transform: `${
-              activeImage === "small"
-                ? `perspective(1000px) translate(${offsetX}px, ${offsetY}px) rotateX(${-rotate.x}deg) rotateY(${-rotate.y}deg)`
-                : `perspective(1000px) translate(${offsetX}px, ${offsetY}px)`
-            }`,
-            transition: "transform 0.1s ease-out",
-          }}
-        >
-          <img alt='small' className={s.homeSmallImg} src={smallImg} />
+        <div className={s.homeSmallImgWrap}>
+          <img
+            alt='small'
+            className={s.homeSmallImg}
+            src={smallImg}
+            onMouseMove={(e) => handleImageMouseMove(e, "small")}
+            onMouseLeave={handleImageMouseLeave}
+            style={{
+              transform: `${
+                activeImage === "small"
+                  ? `perspective(1000px) translate(${offsetX}px, ${offsetY}px) rotateX(${-rotate.x}deg) rotateY(${-rotate.y}deg)`
+                  : `perspective(1000px) translate(${offsetX}px, ${offsetY}px)`
+              }`,
+              transition: "transform 0.1s ease-out",
+            }}
+          />
           {userLoggedIn && (
             <div
               className={s.changePhoto}

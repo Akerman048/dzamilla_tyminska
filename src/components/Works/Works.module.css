@@ -49,7 +49,7 @@ input[type="file"] {
   overflow-y: auto;
   overflow-x: auto;
   white-space: nowrap;
-  max-width: 1200px;
+  max-width: 1050px;
 }
 
 .grid::-webkit-scrollbar {
@@ -88,9 +88,10 @@ input[type="file"] {
 }
 
 .image {
-  width: 400px;
-  height: 260px;
+  width: 350px;
+  height: 240px;
   padding: 15px;
+  /* margin: 10px; */
   z-index: 1;
   position: relative;
   transition: filter 0.3s ease;
@@ -157,6 +158,8 @@ input[type="file"] {
 
 .title {
   position: absolute;
+  text-wrap: wrap;
+  text-align: center;
   z-index: 100;
   top: 50%;
   left: 50%;
@@ -186,14 +189,14 @@ input[type="file"] {
     max-width: 90vw;
   }
 
-  .albumWrap {
+  /* .albumWrap {
     max-width: 30vw;
     width: 100%;
-  }
+  } */
 
-  .image {
+  /* .image {
     width: 30vw;
-  }
+  } */
 }
 
 @media screen and (max-width: 1280px) {
@@ -204,11 +207,11 @@ input[type="file"] {
 
 @media screen and (max-width: 1160px) {
   .leftArrow {
-    left: -20px;
+    left: -50px;
   }
 
   .rightArrow {
-    right: -20px;
+    right: -50px;
   }
 
   .grid::-webkit-scrollbar {
@@ -222,54 +225,113 @@ input[type="file"] {
     display: none;
   }
 
+  .wrapper {
+    margin: 20px 60px;
+  }
+
+  .grid {
+    max-width: 100vw;
+    height: 400px;
+  }
+
   .albumWrap {
-    max-width: 30vw;
+    max-width: 29vw;
     width: 100%;
+    height: 200px;
   }
 
   .image {
-    max-width: 30vw;
-    height: 20vh;
+    max-width: 29vw;
+    height: 100%;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .grid {
+    max-width: 100vw;
+    height: 340px;
+  }
+
+  .albumWrap {
+    max-width: 29vw;
+    width: 100%;
+    height: 170px;
+  }
+
+  .image {
+    max-width: 29vw;
+    height: 100%;
   }
 }
 
 @media screen and (max-width: 700px) {
-  .wrapper {
-    margin: 0px;
-  }
   .grid {
-    display: grid;
-    grid-auto-flow: row;
-    grid-template-columns: repeat(2, 1fr);
     max-width: 100vw;
-    width: 100%;
-    margin: 0 auto;
-  }
-  .albumWrap {
-    max-width: 50vw;
-    width: 100%;
-  }
-  .image {
-    max-width: 50vw;
-    width: 100%;
-    height: 25vh;
+    height: 280px;
   }
 
-  .image img {
-    max-width: 50vw;
+  .albumWrap {
+    max-width: 29vw;
     width: 100%;
-    height: 25vh;
+    height: 140px;
+  }
+
+  .image {
+    padding: 10px;
+    max-width: 29vw;
+    height: 140px;
   }
 }
 
-@media screen and (max-width: 430px) {
+
+
+
+@media screen and (max-width: 600px) {
+
+  .wrapper{
+    margin: 20px 20px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-flow: row;
+    width: 90vw;
+    height: auto;
+    gap: 5px;
+  }
+
   .albumWrap {
-    max-width: 50vw;
+    max-width: 100%;
     width: 100%;
   }
 
   .image {
-    max-width: 50vw;
-    height: 15vh;
+    max-width: 100%;
+    height: 150px;
+  }
+
+}
+
+
+@media screen and (max-width: 550px) {
+  
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-flow: row;
+    width: 100vw;
+    height: auto;
+    gap: 5px;
+  }
+
+  .albumWrap {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .image {
+    max-width: 100%;
+    height: 130px;
   }
 }

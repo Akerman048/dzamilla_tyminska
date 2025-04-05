@@ -75,7 +75,7 @@ export const Works = () => {
       const { scrollLeft, scrollWidth, clientWidth } = gridRef.current;
 
       setHideLeftArrow(scrollLeft === 0);
-      setHideRightArrow(scrollLeft + clientWidth >= scrollWidth);
+      setHideRightArrow(scrollLeft + clientWidth >= scrollWidth -5);
     }
   };
 
