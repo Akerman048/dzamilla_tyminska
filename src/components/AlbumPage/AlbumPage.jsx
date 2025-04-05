@@ -380,8 +380,8 @@ export const AlbumPage = () => {
           {columns.map((column, colIndex) => (
             <div key={colIndex} className={s.column}>
               {column.map((photo, index) => {
-                const globalIndex =
-                  colIndex * Math.ceil(photos.length / 3) + index; // Визначаємо глобальний індекс
+                // const globalIndex =
+                //   colIndex * Math.ceil(photos.length / 3) + index;
                 return (
                   <div key={photo.url} className={s.photoContainer}>
                     <img
@@ -418,7 +418,7 @@ export const AlbumPage = () => {
       <img
         className={s.image}
         src={photo.url}
-        alt='photo'
+        alt={photo.url}
         onClick={() => handleOpenImg(index)}
       />
     </div>
