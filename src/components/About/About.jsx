@@ -107,6 +107,8 @@ export const About = () => {
     window.innerWidth > 960 ? (imgPosition.x - window.innerWidth / 2) / 20 : 0;
   const offsetY = (imgPosition.y - window.innerHeight / 2) / 20;
   return (
+    <>
+    <BlockTitle title='About' />
     <div className={s.container}>
       <div
         className={s.img1}
@@ -217,7 +219,7 @@ export const About = () => {
           </div>
         )}
       </div>
-      <BlockTitle title='About' />
+      
       <div className={s.content}>
         <h2 className={s.title}>Dżamilla Tymińska</h2>
         <div className={s.textWrap}>
@@ -241,5 +243,6 @@ export const About = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };

@@ -10,13 +10,15 @@
   text-align: center;
   background: linear-gradient(
     rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.105) 20%,
-    rgba(244, 244, 244, 0.427) 50%,
+    rgba(237, 237, 237, 0.349) 30%,
+    rgba(255, 255, 255, 0.585) 50%,
+    rgba(255, 255, 255, 0.649) 60%,
     rgba(244, 244, 244, 0.766) 80%,
+    rgb(237, 237, 237) 90%,
     rgb(237, 237, 237) 100%
   );
   padding: 10px;
-  z-index: 100;
+  z-index: 102;
 }
 
 .footer p {
@@ -36,7 +38,7 @@
 }
 
 .socialIcon {
-  font-size: 22px;
+  font-size: 18px;
   transition: 0.3s ease;
 }
 

@@ -5,6 +5,8 @@
   justify-content: center;
   height: 100%;
   position: relative;
+  
+  margin-top: -80px;
 }
 
 .img1 {
@@ -12,7 +14,7 @@
   left: 0;
   top: 0;
   z-index: 101;
-  max-width: 150px;
+  max-width: 200px;
 }
 
 .img1 img {
@@ -20,13 +22,13 @@
 }
 
 .img2 {
-  max-width: 400px;
+  max-width: 300px;
   width: 100%;
-  max-height: 250px;
+  max-height: 200px;
   height: 100%;
   position: absolute;
-  right: 0;
-  bottom: 300px;
+  right: 10px;
+  top: 200px;
   z-index: 101;
 }
 
@@ -43,7 +45,7 @@
   max-height: 200px;
   height: 100%;
   right: 0px;
-  bottom: 10px;
+  bottom: 200px;
   z-index: 101;
 }
 
@@ -60,7 +62,7 @@
   max-width: 87px;
   top: 10px;
   right: 10px;
-  z-index: 100;
+  z-index: 101;
   overflow: hidden;
 }
 
@@ -92,6 +94,18 @@
   max-width: 600px;
   width: 100%;
   margin: 0 auto;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.saveButton{
+  margin-bottom: 10px;
+  border: none;
+    padding: 5px;
+    background-color: rgb(189, 189, 189);
 }
 
 .title {
@@ -104,7 +118,7 @@
 
 .text {
   font-family: "Times New Roman", Times, serif;
-  text-align: center;
+  text-align: justify;
   line-height: 35px;
   font-size: 20px;
   color: rgb(66, 66, 66);
@@ -113,25 +127,39 @@
 }
 
 .textArea {
+  max-width: 500px;
   width: 100%;
-  max-width: 100%;
-  font-size: 20px;
-  font-family: "Times New Roman", Times, serif;
-  line-height: 35px;
-  padding: 15px;
-  border: 1px solid #ccc;
-  resize: vertical; /* або none, якщо не хочеш розтягування */
-  box-sizing: border-box;
-  color: rgb(66, 66, 66);
+  max-height: 200px;
+  height: 100%;
+  min-height: 200px;
+  border: none;
+  padding: 10px;
+  resize: none;
+  box-shadow: 1px 1px 1px 1px rgba(230, 230, 230, 1);
 }
 .img {
   display: none;
 }
 
+
+@media screen and (max-width: 1279px) {
+  .container{
+    margin-top: 0px;
+  }
+}
+
 @media screen and (max-width: 1200px) {
   .img2 {
-    max-width: 300px;
+    top: 0;
+    right: 40px;
+    max-width: 200px;
     width: 100%;
+  }
+
+  .img3 {
+    max-width: 200px;
+    width: 100%;
+    height: auto;
   }
 
   .title {
@@ -161,6 +189,21 @@
   .img img {
     width: 100%;
   }
+
+.content{
+  margin-top: 0px;
+}
+ 
+
+  .text {
+    font-size: 15px;
+    line-height: 35px;
+  }
+}
+
+
+@media screen and (max-width: 600px) {
+
 
   .text {
     font-size: 15px;

@@ -7,18 +7,18 @@
   height: 100vh;
   /* max-width: 1600px; */
   width: 100%;
-  padding: 60px 0px;
   overflow: hidden;
 }
 
 @media screen and (max-width: 1279px) {
   .container {
-    height: auto;
+    height: 100%;
+    
   }
 }
 
 
-@media screen and (max-width: 430px) {
+/* @media screen and (max-width: 430px) {
   .container {
     padding: 40px 0px;
   }
@@ -26,4 +26,4 @@
   .container #main{
     padding: 0px 0px;
   }
-}
+} */

@@ -3,8 +3,8 @@ import s from "./Contacts.module.css";
 import { BlockTitle } from "../Elements/BlockTitle/BlockTitle";
 
 import { Footer } from "../Footer/Footer";
-import { FaInstagram } from "react-icons/fa";
-import { Link } from "react-router-dom";
+// import { FaInstagram } from "react-icons/fa";
+// import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/authContext";
 import { storage, db } from "../../config/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -109,6 +109,7 @@ export const Contacts = () => {
   const offsetY = (imgPosition.y - window.innerHeight / 2) / 20;
   return (
     <>
+      <BlockTitle title='contacts' />
       <div className={s.wrap}>
         <div
           className={s.img1}
@@ -198,7 +199,7 @@ export const Contacts = () => {
             </div>
           )}
         </div>
-        <BlockTitle title='contacts' />
+
         <div className={s.content}>
           {userLoggedIn ? (
             <textarea
@@ -265,9 +266,9 @@ export const Contacts = () => {
             </button>
           )}
         </div>
-        <Link to='https://www.instagram.com/d.cattleya/?fbclid=IwY2xjawIDKepleHRuA2FlbQIxMAABHR8x4009B-T7IDHMQT8LbjHuFod-WEQdcYgX9WXyt7hNTtRQOT157oKUew_aem_Hb4bxSMvRE1Q2UG3jKLxxw#'>
+        {/* <Link to='https://www.instagram.com/d.cattleya/?fbclid=IwY2xjawIDKepleHRuA2FlbQIxMAABHR8x4009B-T7IDHMQT8LbjHuFod-WEQdcYgX9WXyt7hNTtRQOT157oKUew_aem_Hb4bxSMvRE1Q2UG3jKLxxw#'>
           <FaInstagram className={s.socialIcon} />
-        </Link>
+        </Link> */}
       </div>
       <Footer />
     </>
