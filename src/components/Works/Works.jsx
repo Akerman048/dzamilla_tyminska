@@ -58,7 +58,10 @@ export const Works = () => {
 
   useEffect(() => {
     const fetchAlbums = async () => {
-      const albumsQuery = query(albumsCollectionRef, orderBy("createdAt", "desc"));
+      const albumsQuery = query(
+        albumsCollectionRef,
+        orderBy("createdAt", "desc")
+      );
       const snapshot = await getDocs(albumsQuery);
       const albumsData = snapshot.docs.map((doc) => ({
         id: doc.id,
@@ -75,7 +78,7 @@ export const Works = () => {
       const { scrollLeft, scrollWidth, clientWidth } = gridRef.current;
 
       setHideLeftArrow(scrollLeft === 0);
-      setHideRightArrow(scrollLeft + clientWidth >= scrollWidth -5);
+      setHideRightArrow(scrollLeft + clientWidth >= scrollWidth - 5);
     }
   };
 
@@ -104,7 +107,7 @@ export const Works = () => {
       gridElement.addEventListener("scroll", updateArrowsVisibility);
       updateArrowsVisibility(); // Оновлення при завантаженні
     }
-  
+
     return () => {
       if (gridElement) {
         gridElement.removeEventListener("scroll", updateArrowsVisibility);
@@ -216,15 +219,20 @@ export const Works = () => {
           </div>
         )}
         <div className={s.galleryWrap}>
-        {!hideLeftArrow && window.innerWidth > 430 &&(
-  <IoIosArrowBack onClick={handleClickLeft} className={s.leftArrow} />
-)}
+          {!hideLeftArrow && window.innerWidth > 430 && (
+            <IoIosArrowBack onClick={handleClickLeft} className={s.leftArrow} />
+          )}
           <div className={s.grid} ref={gridRef}>
             {albums.map((album) => (
               <div
                 key={album.id}
                 className={s.albumWrap}
-                onClick={() => navigate(`album/${album.name}`)}
+                onClick={() => {
+                  window.history.pushState({}, "", "/#works");
+                  navigate(`/album/${album.name}`);
+                 
+                  
+                }}
               >
                 <img
                   onMouseMove={(e) => handleImageMouseMove(e, album.cover)}
@@ -255,16 +263,18 @@ export const Works = () => {
                     onClick={(e) => handleDelete(e, album)}
                     className={s.deleteAlbum}
                   >
-                    <MdClose  className={s.deleteAlbumIcon}/>
+                    <MdClose className={s.deleteAlbumIcon} />
                   </button>
                 )}
               </div>
             ))}
           </div>
-          {!hideRightArrow &&  window.innerWidth > 430 && (
-  <IoIosArrowForward onClick={handleClickRight} className={s.rightArrow} />
-)}
-
+          {!hideRightArrow && window.innerWidth > 430 && (
+            <IoIosArrowForward
+              onClick={handleClickRight}
+              className={s.rightArrow}
+            />
+          )}
         </div>
       </div>
     </>

@@ -7,11 +7,26 @@ import { About } from "../../components/About/About";
 import { BlockContainer } from "../../components/Elements/BlockContainer/BlockContainer";
 import { Contacts } from "../../components/Contacts/Contacts";
 import { SideNav } from "../../components/Elements/SideNav/SideNav";
+import { useLocation } from "react-router-dom";
 
 export const Home = () => {
   const scrollRef = useRef(null);
   const [activeSection, setActiveSection] = useState("main");
   const [isScrolling, setIsScrolling] = useState(false);
+  const location = useLocation();
+
+useEffect(() => {
+  if (location.state?.fromWorks) {
+    const worksSection = document.getElementById("works");
+    if (worksSection) {
+      worksSection.scrollIntoView({ behavior: "smooth" });
+    }
+
+    // Очищаємо state, щоб не повторювалося
+    window.history.replaceState({}, "");
+  }
+}, [location.state]);
+
 
   // Масив секцій для контролю скролу
   // ✅ Стабілізація масиву sections за допомогою useMemo()
@@ -101,6 +116,16 @@ export const Home = () => {
     };
   }, [sections]);
 
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash === "#works") {
+      const worksSection = document.getElementById("works");
+      if (worksSection) {
+        worksSection.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, []);
+
   // Додати обробник для мишки та тачпаду
   useEffect(() => {
     const container = scrollRef.current;
@@ -112,6 +137,25 @@ export const Home = () => {
       container.removeEventListener("wheel", handleScroll);
     };
   }, [currentSectionIndex, isScrolling, handleScroll]);
+
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const hash = window.location.hash;
+      const targetElement = document.querySelector(hash || "#works");
+  
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: "smooth" });
+      }
+    };
+  
+    window.addEventListener("popstate", handlePopState);
+  
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, []);
+  
 
   // Перехід до компонента з URL (#)
   useEffect(() => {
