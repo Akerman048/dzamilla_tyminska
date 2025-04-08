@@ -46,6 +46,19 @@
   color: rgb(110, 110, 110);
 }
 
+@media screen and (max-width: 600px) {
+  .footer {
+    position: relative;
+  }
+  .footer p {
+    color: rgb(72, 71, 71);
+    font-weight: 400;
+    font-size: 12px;
+  }
+}
+
+
+
 @media screen and (max-width: 450px) {
   .footer {
     padding: 0px;

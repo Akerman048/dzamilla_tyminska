@@ -66,7 +66,7 @@ export const SideNav = ({ activeSection, sideLines }) => {
                 navigate("/#works");
               }}
             >
-              <a href='#works'>works</a>
+              <a href='#works'>portfolio</a>
             </li>
             <li
               onClick={() => {
@@ -79,10 +79,10 @@ export const SideNav = ({ activeSection, sideLines }) => {
             <li
               onClick={() => {
                 setIsOpen(!isOpen);
-                navigate("/#contacts");
+                navigate("/#contact");
               }}
             >
-              <a href='#contacts'>contacts</a>
+              <a href='#contacts'>contact</a>
             </li>
           </ul>
         </div>

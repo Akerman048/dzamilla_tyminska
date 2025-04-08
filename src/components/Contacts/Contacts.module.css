@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   height: 100%;
   position: relative;
   margin-top: -80px;
@@ -14,7 +15,7 @@
   height: 100%;
   position: absolute;
   left: 0px;
-  bottom: 100px;
+  top: 0px;
   z-index: 101;
 }
 
@@ -105,6 +106,7 @@
   height: 100%;
   color: rgb(83, 83, 83);
   z-index: 102;
+  height: auto;
 }
 
 .textArea {
@@ -191,10 +193,14 @@
 }
 
 @media screen and (max-width: 2000px) {
+  .wrap{
+      
+    
+  }
   .img1 {
-    max-width: 500px;
+    max-width: 400px;
     width: 100%;
-    max-height: 300px;
+    max-height: 250px;
     height: 100%;
     
   }
@@ -224,8 +230,9 @@
 
 @media screen and (max-width: 1279px) {
   .wrap {
-    margin-top: -50px;
-    margin-bottom: 50px;
+    margin-top: 50px;
+    margin-bottom: 90px;
+    height: auto;
   }
   .img1,
   .img2,
@@ -236,11 +243,11 @@
 
 @media screen and (max-width: 990px) {
 
-  .wrap {
+  /* .wrap {
     height: 100%;
     margin-top: -50px;
     margin-bottom: 200px;
-  }
+  } */
   .content {
     padding: 0px 10px;
     gap: 20px;

@@ -196,8 +196,18 @@ input[type="file"] {
     justify-content: center;
   }
 
+  .imgWrap{
+    display: flex;
+    justify-content: center;
+  }
+
+  .homeImgWrap{
+    max-width: 80vw;
+  max-height: 300px;
+  }
+
   .homeSideImgWrap {
-    max-width: 200px;
+    max-width: 30vw;
     left: 50px;
     bottom: -150px;
   }
@@ -215,7 +225,7 @@ input[type="file"] {
   }
 
   .homeSideImgWrap {
-    max-width: 200px;
+    max-width: 40vw;
     left: 50px;
     bottom: -150px;
   }

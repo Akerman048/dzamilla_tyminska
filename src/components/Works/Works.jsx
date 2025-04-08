@@ -197,7 +197,7 @@ export const Works = () => {
 
   return (
     <>
-      <BlockTitle title='Works' />
+      <BlockTitle title='portfolio' />
       <div className={s.wrapper}>
         {userLoggedIn && (
           <div className={s.uploadWrap}>

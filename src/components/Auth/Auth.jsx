@@ -6,16 +6,19 @@ import {
 } from "../../config/auth";
 import { useAuth } from "../../contexts/authContext";
 import { useNavigate } from "react-router-dom";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
+import { app } from "../../config/firebase";
 import s from "./Auth.module.css";
 import { FcGoogle } from "react-icons/fc";
 export const Auth = () => {
   const { userLoggedIn } = useAuth();
-
+  const db = getFirestore(app);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSigningIn, setSigningIn] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
+  const allowedRoles = ["admin"];
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -25,13 +28,33 @@ export const Auth = () => {
     }
   };
 
-  const onGoogleSignIn = (e) => {
+  const onGoogleSignIn = async (e) => {
     e.preventDefault();
     if (!isSigningIn) {
       setSigningIn(true);
-      doSignInWithGoogle().catch((err) => {
+      try {
+        const result = await doSignInWithGoogle();
+        const user = result.user;
+  
+        // отримаємо роль користувача з Firestore
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+  
+        if (userSnap.exists()) {
+          const role = userSnap.data().role;
+          if (!allowedRoles.includes(role)) {
+            await doSignOut();
+            setErrorMessage("Access denied. You are not an admin.");
+          }
+        } else {
+          await doSignOut();
+          setErrorMessage("");
+        }
+      } catch (err) {
+        setErrorMessage(err.message);
+      } finally {
         setSigningIn(false);
-      });
+      }
     }
   };
 

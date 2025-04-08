@@ -134,3 +134,10 @@
 .navLinks li:hover {
   text-decoration: line-through;
 }
+
+
+@media screen and (max-width:600px) {
+  .navLinks li{
+    font-size: 22px;
+  }
+}

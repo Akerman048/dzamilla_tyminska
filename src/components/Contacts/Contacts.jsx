@@ -109,7 +109,7 @@ export const Contacts = () => {
   const offsetY = (imgPosition.y - window.innerHeight / 2) / 20;
   return (
     <>
-      <BlockTitle title='contacts' />
+      <BlockTitle title='contact' />
       <div className={s.wrap}>
         <div
           className={s.img1}
