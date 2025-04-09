@@ -82,7 +82,7 @@
   max-height: 280px;
   height: 100%;
   right: 140px;
-  bottom: 70px;
+  bottom: 400px;
   z-index: 101;
 }
 
@@ -192,24 +192,23 @@
   background-color: rgb(189, 189, 189);
 }
 
-@media screen and (max-width: 2000px) {
+@media screen and (min-width: 2000px) {
   .wrap{
       
     
   }
   .img1 {
-    max-width: 400px;
+    max-width: 22vw;
     width: 100%;
-    max-height: 250px;
-    height: 100%;
+    
+    height: auto;
     
   }
 
   .img2 {
-    max-width: 350px;
+    max-width: 15vw;
     width: 100%;
-    max-height: 200px;
-    height: 100%;
+    height: auto;
 
   }
   
@@ -220,10 +219,10 @@
   }
   
   .img3 {
-    max-width: 500px;
+    max-width: 20vw;
     width: 100%;
-    max-height: 280px;
-    height: 100%;
+    height: auto;
+    
     
   }
 }

@@ -144,7 +144,7 @@
 @media screen and (min-width: 2000px) {
   
 .img1 {
-  max-width: 400px;
+  max-width: 18vw;
 }
 
 .img1 img {
@@ -152,10 +152,9 @@
 }
 
 .img2 {
-  max-width: 600px;
+  max-width: 18vw;
   width: 100%;
-  max-height: 350px;
-  height: 100%;
+  height: auto;
   
 }
 
@@ -165,10 +164,10 @@
 }
 
 .img3 {
-  max-width: 500px;
+  max-width: 18vw;
   width: 100%;
-  max-height: 300px;
-  height: 100%;
+ max-height: 35vh;
+ height: 100%;
   
 }
 
