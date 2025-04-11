@@ -82,7 +82,7 @@
   max-height: 280px;
   height: 100%;
   right: 140px;
-  bottom: 400px;
+  bottom: 100px;
   z-index: 101;
 }
 
@@ -194,7 +194,7 @@
 
 @media screen and (min-width: 2000px) {
   .wrap{
-      
+      margin-top: -220px ;
     
   }
   .img1 {

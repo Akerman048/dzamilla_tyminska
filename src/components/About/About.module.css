@@ -28,7 +28,7 @@
   height: 100%;
   position: absolute;
   right: 10px;
-  top: 200px;
+  top: 100px;
   z-index: 101;
 }
 
@@ -142,9 +142,13 @@
 }
 
 @media screen and (min-width: 2000px) {
+
+  .container{
+    margin-top: -220px;
+  }
   
 .img1 {
-  max-width: 18vw;
+  max-width: 15vw;
 }
 
 .img1 img {

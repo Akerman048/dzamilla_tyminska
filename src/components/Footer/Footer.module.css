@@ -55,6 +55,8 @@
     font-weight: 400;
     font-size: 12px;
   }
+
+  
 }
 
 
@@ -62,6 +64,7 @@
 @media screen and (max-width: 450px) {
   .footer {
     padding: 0px;
+    background: none;
   }
   .footer p {
     color: rgb(72, 71, 71);

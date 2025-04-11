@@ -7,6 +7,15 @@
     color: rgb(72, 71, 71);
 }
 
+@media screen and (min-width: 2000px) {
+
+    .title{
+     margin-top: 200px;
+     
+    }
+   }
+
+
 @media screen and (max-width: 600px) {
 
    .title{
@@ -16,4 +25,24 @@
     margin-top: 40px;
     
    }
+  }
+
+
+  @media screen and (max-width: 600px) {
+
+   .title{
+    display: block;
+    position: relative;
+    top: 0;
+    margin-top: 40px;
+    
+   }
+  }
+
+  @media (min-width: 992px) and (min-height: 400px) {
+    .title{
+        margin-top: 20px;
+        
+    }
+   
   }

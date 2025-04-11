@@ -45,7 +45,7 @@ export const SideNav = ({ activeSection, sideLines }) => {
       )}
       {isOpen && (
         <div className={s.overlay} onClick={() => setIsOpen(false)}>
-          <div>
+          <div className={s.nameNSubtitle}>
             <h1 className={s.name}>
               <a
                 href='#main'
