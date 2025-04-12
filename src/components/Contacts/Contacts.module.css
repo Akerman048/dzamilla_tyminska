@@ -193,10 +193,7 @@
 }
 
 @media screen and (min-width: 2000px) {
-  .wrap{
-      margin-top: -220px ;
-    
-  }
+ 
   .img1 {
     max-width: 22vw;
     width: 100%;
