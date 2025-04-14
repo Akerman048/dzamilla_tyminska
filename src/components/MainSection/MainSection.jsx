@@ -231,7 +231,7 @@ export const MainSection = () => {
 
       <div className={s.author}>
         <h1 className={s.name}>Dżamilla Tymińska</h1>
-        <p className={s.profession}>creative photography</p>
+        <p className={s.profession}>Captured Memories Photography</p>
       </div>
     </div>
   );
