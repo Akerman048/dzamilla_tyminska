@@ -351,13 +351,13 @@ export const AlbumPage = () => {
           home
         </button> */}
       </div>
-      <div className={s.mainPhoto}>
+      {window.innerWidth > 990 && <div className={s.mainPhoto}>
         {mainPhoto ? (
           <img src={mainPhoto} alt='Main' />
         ) : (
           <p>There is no main photo</p>
         )}
-      </div>
+      </div>}
 
       <div className={s.albumWrapper}>
         {/* <button className={s.backButton} onClick={() => navigate("/#works")}>
