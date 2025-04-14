@@ -240,7 +240,7 @@
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-.fadeOut {
+/* .fadeOut {
   opacity: 1;
 }
 
@@ -252,8 +252,8 @@
 .hidden {
   opacity: 1;
   transform: scale(0.95);
-  transition: none; /* Вимикаємо анімацію при приховуванні */
-}
+  transition: none;
+} */
 
 .noScroll {
   overflow: hidden;
