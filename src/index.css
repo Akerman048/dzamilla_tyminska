@@ -50,6 +50,11 @@ input {
   /* padding: 0px 50px; */
 }
 
+img {
+  pointer-events: none;
+  user-select: none;
+}
+
 @media screen and (max-width: 900px) {
   .container {
     padding: 0px 20px;
