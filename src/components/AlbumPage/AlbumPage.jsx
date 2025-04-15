@@ -161,6 +161,38 @@ export const AlbumPage = () => {
       document.body.classList.add(s.noScroll);
     }
   };
+  const handleMouseMove = useCallback((e) => {
+    if (!isDragging) return;
+  
+    e.preventDefault();
+  
+    if (!e.target || typeof e.target.getBoundingClientRect !== "function") return;
+    const diff = e.clientX - startX;
+    setOffsetX(diff);
+  }, [isDragging, startX]);
+
+  const handleMouseUp = useCallback(() => {
+    if (!isDragging) return;
+  
+    setIsDragging(false);
+  
+    if (offsetX > swipeThreshold) {
+      animateSwipe(window.innerWidth, () => {
+        showPrevPhoto();
+        setOffsetX(0);
+      });
+    } else if (offsetX < -swipeThreshold) {
+      animateSwipe(-window.innerWidth, () => {
+        showNextPhoto();
+        setOffsetX(0);
+      });
+    } else {
+      animateSwipe(0, () => setOffsetX(0));
+    }
+  
+    window.removeEventListener("mousemove", handleMouseMove);
+    window.removeEventListener("mouseup", handleMouseUp);
+  }, [isDragging, offsetX, swipeThreshold, animateSwipe, showPrevPhoto, showNextPhoto, handleMouseMove]);
 
   const handleCloseModal = useCallback(() => {
     setSelectedPhotoIndex(null);
@@ -224,46 +256,9 @@ export const AlbumPage = () => {
     window.addEventListener("mouseup", handleMouseUp);
   };
 
-  const handleMouseMove = (e) => {
-    if (!isDragging) return;
+  
 
-    e.preventDefault();
-
-    if (!e.target || typeof e.target.getBoundingClientRect !== "function")
-      return;
-    // Визначаємо зміщення на основі початкової позиції мишки
-    const diff = e.clientX - startX;
-    setOffsetX(diff);
-  };
-
-  const handleMouseUp = () => {
-    if (!isDragging) return;
-
-    setIsDragging(false);
-
-    // Перемикання на наступне фото, якщо поріг перевищено
-    if (offsetX > swipeThreshold) {
-      animateSwipe(window.innerWidth, () => {
-        showPrevPhoto();
-        setOffsetX(0);
-      });
-    }
-    // Перемикання на попереднє фото, якщо поріг перевищено
-    else if (offsetX < -swipeThreshold) {
-      animateSwipe(-window.innerWidth, () => {
-        showNextPhoto();
-        setOffsetX(0);
-      });
-    }
-    // Якщо зміщення менше порогу — повертаємо у вихідне положення
-    else {
-      animateSwipe(0, () => setOffsetX(0));
-    }
-
-    // Видаляємо глобальні обробники подій
-    window.removeEventListener("mousemove", handleMouseMove);
-    window.removeEventListener("mouseup", handleMouseUp);
-  };
+  
 
   const animateSwipe = (targetOffset, callback) => {
     let startTime;
