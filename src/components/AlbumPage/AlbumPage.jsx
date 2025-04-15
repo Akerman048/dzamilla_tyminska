@@ -171,6 +171,65 @@ export const AlbumPage = () => {
     setOffsetX(diff);
   }, [isDragging, startX]);
 
+  const animateSwipe = useCallback((targetOffset, callback) => {
+    let startTime;
+    const duration = 0; // Тривалість анімації у мс
+    const startOffset = offsetX;
+  
+    const step = (timestamp) => {
+      if (!startTime) startTime = timestamp;
+      const progress = (timestamp - startTime) / duration;
+  
+      if (progress < 1) {
+        const newOffset = startOffset + (targetOffset - startOffset) * progress;
+        setOffsetX(newOffset);
+        requestAnimationFrame(step);
+      } else {
+        setOffsetX(targetOffset);
+        if (callback) callback();
+      }
+    };
+  
+    requestAnimationFrame(step);
+  }, [offsetX]);
+  
+
+  const showPrevPhoto = useCallback(() => {
+    if (isTransitioning) return;
+  
+    setIsTransitioning(true);
+    setIsVisible(false);
+  
+    setTimeout(() => {
+      setSelectedPhotoIndex((prev) =>
+        prev > 0 ? prev - 1 : photos.length - 1
+      );
+  
+      setTimeout(() => {
+        setIsVisible(true);
+        setIsTransitioning(false);
+      }, 20);
+    }, 20);
+  }, [isTransitioning, photos.length]);
+
+  const showNextPhoto = useCallback(() => {
+    if (isTransitioning || !photos.length) return;
+  
+    setIsTransitioning(true);
+    setIsVisible(false);
+  
+    setTimeout(() => {
+      setSelectedPhotoIndex((prev) =>
+        prev < photos.length - 1 ? prev + 1 : 0
+      );
+  
+      setTimeout(() => {
+        setIsVisible(true);
+        setIsTransitioning(false);
+      }, 0);
+    }, 0);
+  }, [isTransitioning, photos.length]);
+
   const handleMouseUp = useCallback(() => {
     if (!isDragging) return;
   
@@ -205,42 +264,10 @@ export const AlbumPage = () => {
     window.removeEventListener("mouseup", handleMouseUp);
   }, [handleMouseMove, handleMouseUp]);
 
-  const showPrevPhoto = useCallback(() => {
-    if (isTransitioning) return;
   
-    setIsTransitioning(true);
-    setIsVisible(false);
-  
-    setTimeout(() => {
-      setSelectedPhotoIndex((prev) =>
-        prev > 0 ? prev - 1 : photos.length - 1
-      );
-  
-      setTimeout(() => {
-        setIsVisible(true);
-        setIsTransitioning(false);
-      }, 20);
-    }, 20);
-  }, [isTransitioning, photos.length]);
   
 
-  const showNextPhoto = useCallback(() => {
-    if (isTransitioning || !photos.length) return;
   
-    setIsTransitioning(true);
-    setIsVisible(false);
-  
-    setTimeout(() => {
-      setSelectedPhotoIndex((prev) =>
-        prev < photos.length - 1 ? prev + 1 : 0
-      );
-  
-      setTimeout(() => {
-        setIsVisible(true);
-        setIsTransitioning(false);
-      }, 0);
-    }, 0);
-  }, [isTransitioning, photos.length]);
   
   const handleMouseDown = (e) => {
     e.preventDefault();
@@ -260,27 +287,7 @@ export const AlbumPage = () => {
 
   
 
-  const animateSwipe = (targetOffset, callback) => {
-    let startTime;
-    const duration = 0; // Тривалість анімації у мілісекундах
-    const startOffset = offsetX;
-
-    const step = (timestamp) => {
-      if (!startTime) startTime = timestamp;
-      const progress = (timestamp - startTime) / duration;
-
-      if (progress < 1) {
-        const newOffset = startOffset + (targetOffset - startOffset) * progress;
-        setOffsetX(newOffset);
-        requestAnimationFrame(step);
-      } else {
-        setOffsetX(targetOffset);
-        if (callback) callback();
-      }
-    };
-
-    requestAnimationFrame(step);
-  };
+  
 
   const handleTouchStart = (e) => {
     setIsDragging(true);
