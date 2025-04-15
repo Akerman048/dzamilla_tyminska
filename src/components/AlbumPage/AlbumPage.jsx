@@ -97,11 +97,13 @@ export const AlbumPage = () => {
     const snapshot = await uploadBytes(imageRef, imageUpload);
     const url = await getDownloadURL(snapshot.ref);
 
-    await addDoc(photosCollectionRef, { url, album: albumName,  createdAt: serverTimestamp(), });
+    await addDoc(photosCollectionRef, {
+      url,
+      album: albumName,
+      createdAt: serverTimestamp(),
+    });
     setPhotos((prev) => [...prev, { url }]);
   };
-
-  
 
   // Оновлення головного фото
   const changeMainPhoto = async (photoUrl) => {
@@ -111,7 +113,7 @@ export const AlbumPage = () => {
     }
 
     const albumRef = doc(db, "albums", albumId);
-    await updateDoc(albumRef, { mainPhoto: photoUrl, cover: photoUrl });
+    await updateDoc(albumRef, { mainPhoto: photoUrl });
 
     setMainPhoto(photoUrl);
   };
@@ -129,7 +131,8 @@ export const AlbumPage = () => {
       // Отримуємо фото з Firestore, щоб знайти його `id`
       const photosQuery = query(
         photosCollectionRef,
-        where("url", "==", photoUrl), orderBy("createdAt", "asc") 
+        where("url", "==", photoUrl),
+        orderBy("createdAt", "asc")
       );
       const photosSnapshot = await getDocs(photosQuery);
 
@@ -159,54 +162,54 @@ export const AlbumPage = () => {
     }
   };
 
-  const handleCloseModal = () => {
+  const handleCloseModal = useCallback(() => {
     setSelectedPhotoIndex(null);
     setOffsetX(0);
     setIsDragging(false);
-
+  
     document.body.classList.remove(s.noScroll);
-    // Прибираємо обробники подій при закритті модального вікна
+  
     window.removeEventListener("mousemove", handleMouseMove);
     window.removeEventListener("mouseup", handleMouseUp);
-  };
+  }, [handleMouseMove, handleMouseUp]);
 
-  const showPrevPhoto = () => {
+  const showPrevPhoto = useCallback(() => {
     if (isTransitioning) return;
-
+  
     setIsTransitioning(true);
-    setIsVisible(false); // Миттєво ховаємо поточне фото
-
+    setIsVisible(false);
+  
     setTimeout(() => {
       setSelectedPhotoIndex((prev) =>
         prev > 0 ? prev - 1 : photos.length - 1
       );
-
-      // Плавно показуємо нове фото після переходу
+  
       setTimeout(() => {
         setIsVisible(true);
         setIsTransitioning(false);
       }, 20);
     }, 20);
-  };
+  }, [isTransitioning, photos.length]);
+  
 
-  const showNextPhoto = () => {
+  const showNextPhoto = useCallback(() => {
     if (isTransitioning || !photos.length) return;
-
+  
     setIsTransitioning(true);
-    setIsVisible(false); // Миттєво ховаємо поточне фото
-
+    setIsVisible(false);
+  
     setTimeout(() => {
       setSelectedPhotoIndex((prev) =>
         prev < photos.length - 1 ? prev + 1 : 0
       );
-
-      // Плавно показуємо нове фото після переходу
+  
       setTimeout(() => {
         setIsVisible(true);
         setIsTransitioning(false);
       }, 0);
     }, 0);
-  };
+  }, [isTransitioning, photos.length]);
+  
   const handleMouseDown = (e) => {
     e.preventDefault();
     setIsDragging(true);
@@ -226,7 +229,8 @@ export const AlbumPage = () => {
 
     e.preventDefault();
 
-    if (!e.target || typeof e.target.getBoundingClientRect !== "function") return;
+    if (!e.target || typeof e.target.getBoundingClientRect !== "function")
+      return;
     // Визначаємо зміщення на основі початкової позиції мишки
     const diff = e.clientX - startX;
     setOffsetX(diff);
@@ -292,7 +296,12 @@ export const AlbumPage = () => {
   const handleTouchMove = (e) => {
     if (!isDragging) return;
 
-    if (!e.touches[0] || !e.target || typeof e.target.getBoundingClientRect !== "function") return;
+    if (
+      !e.touches[0] ||
+      !e.target ||
+      typeof e.target.getBoundingClientRect !== "function"
+    )
+      return;
 
     const diff = e.touches[0].clientX - startX;
     setOffsetX(diff);
@@ -321,7 +330,7 @@ export const AlbumPage = () => {
       // Прибираємо клас після закриття
       document.body.classList.remove(s.noScroll);
     }
-  
+
     // Очищуємо при закритті компонента
     return () => {
       document.body.classList.remove(s.noScroll);
@@ -329,8 +338,12 @@ export const AlbumPage = () => {
   }, [selectedPhotoIndex]);
 
   const flattenedPhotos = [];
-  const maxLength = Math.max(columns[0].length, columns[1].length, columns[2].length);
-  
+  const maxLength = Math.max(
+    columns[0].length,
+    columns[1].length,
+    columns[2].length
+  );
+
   for (let i = 0; i < maxLength; i++) {
     for (let col = 0; col < 3; col++) {
       if (columns[col][i]) {
@@ -339,25 +352,55 @@ export const AlbumPage = () => {
     }
   }
 
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (selectedPhotoIndex !== null) {
+        if (e.key === "ArrowLeft") {
+          showPrevPhoto();
+        } else if (e.key === "ArrowRight") {
+          showNextPhoto();
+        } else if (e.key === "Escape") {
+          handleCloseModal();
+        }
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [
+    selectedPhotoIndex,
+    photos,
+    handleCloseModal,
+    showNextPhoto,
+    showPrevPhoto,
+  ]);
+
   return (
     <>
-      <SideNav sideLines={false}/>
+      <SideNav sideLines={false} />
       <div className={s.nav}>
-        <h2 className={s.name}><a href='#main' onClick={() => {
-                
-                navigate("/#main");
-              }}>Dżamilla Tymińska </a></h2>{" "}
+        <h2 className={s.name}>
+          <a
+            href='#main'
+            onClick={() => {
+              navigate("/#main");
+            }}
+          >
+            Dżamilla Tymińska{" "}
+          </a>
+        </h2>{" "}
         {/* <button className={s.homebutton} onClick={() => navigate("/")}>
           home
         </button> */}
       </div>
-      {window.innerWidth > 990 && <div className={s.mainPhoto}>
-        {mainPhoto ? (
-          <img src={mainPhoto} alt='Main' />
-        ) : (
-          <p>There is no main photo</p>
-        )}
-      </div>}
+      {window.innerWidth > 990 && (
+        <div className={s.mainPhoto}>
+          {mainPhoto ? (
+            <img src={mainPhoto} alt='Main' />
+          ) : (
+            <p>There is no main photo</p>
+          )}
+        </div>
+      )}
 
       <div className={s.albumWrapper}>
         {/* <button className={s.backButton} onClick={() => navigate("/#works")}>
@@ -388,7 +431,11 @@ export const AlbumPage = () => {
                       className={s.image}
                       src={photo.url}
                       alt='photoContainer'
-                      onClick={() => handleOpenImg(photos.findIndex(p => p.url === photo.url))} // Передаємо глобальний індекс
+                      onClick={() =>
+                        handleOpenImg(
+                          photos.findIndex((p) => p.url === photo.url)
+                        )
+                      } // Передаємо глобальний індекс
                     />
                     {userLoggedIn && (
                       <button
@@ -413,47 +460,49 @@ export const AlbumPage = () => {
           ))}
         </div>
         <div className={`${s.masonryGrid} ${s.mobileGrid}`}>
-  {flattenedPhotos.map((photo, index) => (
-    <div key={photo.url} className={s.photoContainer}>
-      <img
-        className={s.image}
-        src={photo.url}
-        alt={photo.url}
-        onClick={() => handleOpenImg(index)}
-      />
-    </div>
-  ))}
-</div>
+          {flattenedPhotos.map((photo, index) => (
+            <div key={photo.url} className={s.photoContainer}>
+              <img
+                className={s.image}
+                src={photo.url}
+                alt={photo.url}
+                onClick={() => handleOpenImg(index)}
+              />
+            </div>
+          ))}
+        </div>
       </div>
 
       {selectedPhotoIndex !== null && photos[selectedPhotoIndex] && (
         <div className={s.modal} onClick={handleCloseModal}>
-          <div
-            className={s.modalImageWrapper}
-          ><div className={`${s.imageContainer} 
+          <div className={s.modalImageWrapper}>
+            <div
+              className={`${s.imageContainer} 
           ${isVisible ? s.fadeIn : s.hidden}
-            `}>
-            <img
-              src={photos[selectedPhotoIndex].url}
-              alt='Full view'
-              className={s.modalImage}
-              style={{
-                transform: `translateX(${offsetX}px)`,
-                transition: isDragging ? "transform 0.1s ease" : "none",
-                cursor: isDragging ? "grabbing" : "grab",
-              }}
-              onClick={(e) => e.stopPropagation()}
-              onMouseDown={handleMouseDown}
-              onMouseMove={handleMouseMove}
-              onMouseUp={handleMouseUp}
-              onMouseLeave={handleMouseUp}
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
-            /> </div>
+            `}
+            >
+              <img
+                src={photos[selectedPhotoIndex].url}
+                alt='Full view'
+                className={s.modalImage}
+                style={{
+                  transform: `translateX(${offsetX}px)`,
+                  transition: isDragging ? "transform 0.1s ease" : "none",
+                  cursor: isDragging ? "grabbing" : "grab",
+                }}
+                onClick={(e) => e.stopPropagation()}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+                onMouseLeave={handleMouseUp}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+              />{" "}
+            </div>
             <button className={s.closeButton} onClick={handleCloseModal}>
-            <IoCloseOutline className={s.closeModal} />
-          </button>
+              <IoCloseOutline className={s.closeModal} />
+            </button>
           </div>
           <button
             className={s.prevButton}
@@ -473,7 +522,6 @@ export const AlbumPage = () => {
           >
             <HiOutlineArrowNarrowRight className={s.arrows} />
           </button>
-          
         </div>
       )}
     </>

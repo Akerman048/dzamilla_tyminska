@@ -17,6 +17,7 @@ import {
   deleteDoc,
   query,
   orderBy,
+  updateDoc,
 } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { IoIosArrowBack } from "react-icons/io";
@@ -27,7 +28,6 @@ import { useAuth } from "../../contexts/authContext";
 export const Works = () => {
   const { userLoggedIn } = useAuth();
   const [albumName, setAlbumName] = useState("");
-  const [imageUpload, setImageUpload] = useState(null);
   const [albums, setAlbums] = useState([]);
   const navigate = useNavigate();
   const gridRef = useRef(null);
@@ -38,6 +38,11 @@ export const Works = () => {
 
   const [hideLeftArrow, setHideLeftArrow] = useState(true);
   const [hideRightArrow, setHideRightArrow] = useState(false);
+
+  const [coverImage, setCoverImage] = useState(null);
+
+  const [editingCoverId, setEditingCoverId] = useState(null);
+  const [newCoverImage, setNewCoverImage] = useState(null);
 
   const albumsCollectionRef = collection(db, "albums");
 
@@ -116,26 +121,47 @@ export const Works = () => {
   }, [albums]);
 
   const uploadImage = async () => {
-    if (!imageUpload || !albumName) {
-      alert("Виберіть файл і введіть назву альбому!");
+    if (!coverImage || !albumName) {
+      alert("Select a file and enter an album name!");
       return;
     }
 
-    const imageRef = ref(storage, `albums/${albumName}/${imageUpload.name}`);
-    const snapshot = await uploadBytes(imageRef, imageUpload);
-    const url = await getDownloadURL(snapshot.ref);
+    try {
+      // Завантажуємо тільки обкладинку
+      const coverRef = ref(
+        storage,
+        `albums/${albumName}/cover_${coverImage.name}`
+      );
+      const coverSnapshot = await uploadBytes(coverRef, coverImage);
+      const coverUrl = await getDownloadURL(coverSnapshot.ref);
 
-    const newAlbumRef = await addDoc(albumsCollectionRef, {
-      name: albumName,
-      cover: url,
-      createdAt: new Date(),
-    });
-    setAlbums((prev) => [
-      ...prev,
-      { id: newAlbumRef.id, name: albumName, cover: url },
-    ]);
-    setAlbumName("");
-    setImageUpload(null);
+      // Створюємо альбом без жодного фото
+      const newAlbumRef = await addDoc(albumsCollectionRef, {
+        name: albumName,
+        cover: coverUrl,
+        mainPhoto: "", // або можеш не вказувати
+        createdAt: new Date(),
+      });
+
+      setAlbums((prev) => [
+        ...prev,
+        {
+          id: newAlbumRef.id,
+          name: albumName,
+          cover: coverUrl,
+          mainPhoto: "",
+        },
+      ]);
+
+      // Скидаємо значення
+      setAlbumName("");
+      setCoverImage(null);
+
+      alert("Album created!");
+    } catch (error) {
+      console.error("Error creating album:", error);
+      alert("Failed to create album.");
+    }
   };
 
   const handleDelete = async (e, album) => {
@@ -150,8 +176,8 @@ export const Works = () => {
 
       setAlbums((prevAlbums) => prevAlbums.filter((a) => a.id !== album.id));
     } catch (error) {
-      console.error("Помилка при видаленні альбому:", error);
-      alert("Не вдалося видалити альбом. Спробуйте ще раз.");
+      console.error("Error deleting album:", error);
+      alert("Could not delete album. Please try again..");
     }
   };
 
@@ -195,6 +221,42 @@ export const Works = () => {
     setActiveImage(null);
   };
 
+  const handleCoverChange = async (album) => {
+    if (!newCoverImage || !album.id) return;
+
+    try {
+      // 1. Видалити стару обкладинку (опціонально)
+      const oldCoverRef = ref(storage, album.cover);
+      await deleteObject(oldCoverRef);
+
+      // 2. Завантажити нову обкладинку
+      const newCoverRef = ref(
+        storage,
+        `albums/${album.name}/cover_${newCoverImage.name}`
+      );
+      const snapshot = await uploadBytes(newCoverRef, newCoverImage);
+      const newCoverUrl = await getDownloadURL(snapshot.ref);
+
+      // 3. Оновити документ у Firestore
+      const albumRef = doc(db, "albums", album.id);
+      await updateDoc(albumRef, { cover: newCoverUrl });
+
+      // 4. Оновити локальний стан
+      setAlbums((prev) =>
+        prev.map((a) => (a.id === album.id ? { ...a, cover: newCoverUrl } : a))
+      );
+
+      // 5. Очистити стани
+      setEditingCoverId(null);
+      setNewCoverImage(null);
+
+      alert("Cover updated!");
+    } catch (error) {
+      console.error("Error while changing cover:", error);
+      alert("Could not change cover.");
+    }
+  };
+
   return (
     <>
       <BlockTitle title='portfolio' />
@@ -204,7 +266,7 @@ export const Works = () => {
             <input
               className={s.inputFile}
               type='file'
-              onChange={(e) => setImageUpload(e.target.files[0])}
+              onChange={(e) => setCoverImage(e.target.files[0])}
             />
             <input
               className={s.inputTitle}
@@ -230,10 +292,39 @@ export const Works = () => {
                 onClick={() => {
                   window.history.pushState({}, "", "/#works");
                   navigate(`/album/${album.name}`);
-                 
-                  
                 }}
               >
+                {userLoggedIn && (
+                  <>
+                    <label
+                      className={s.changeCoverLabel}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      Change cover
+                      <input
+                        type='file'
+                        accept='image/*'
+                        style={{ display: "none" }}
+                        onChange={(e) => {
+                          e.stopPropagation();
+                          setEditingCoverId(album.id);
+                          setNewCoverImage(e.target.files[0]);
+                        }}
+                      />
+                    </label>
+                    {editingCoverId === album.id && newCoverImage && (
+                      <button
+                        className={s.updateCoverBtn}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleCoverChange(album);
+                        }}
+                      >
+                        save new cover
+                      </button>
+                    )}
+                  </>
+                )}
                 <img
                   onMouseMove={(e) => handleImageMouseMove(e, album.cover)}
                   onMouseLeave={handleImageMouseLeave}
