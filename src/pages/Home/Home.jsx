@@ -172,16 +172,16 @@ useEffect(() => {
     <div className={s.container} ref={scrollRef}>
       <SideNav activeSection={activeSection} sideLines={true} />
 
-      <div id='main'>
+      <div id='main' className={s.main}>
         <BlockContainer children={<MainSection />} />
       </div>
-      <div id='works'>
+      <div id='works' className={s.works}>
         <BlockContainer children={<Works />} />
       </div>
-      <div id='about'>
+      <div id='about' className={s.about}>
         <BlockContainer children={<About />} />
       </div>
-      <div id='contacts'>
+      <div id='contacts' className={s.contacts}>
         <BlockContainer children={<Contacts />} />
       </div>
     </div>

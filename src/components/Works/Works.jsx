@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import s from "./Works.module.css";
-import { BlockTitle } from "../Elements/BlockTitle/BlockTitle";
 import { storage, db } from "../../config/firebase";
 import {
   ref,
@@ -259,8 +258,9 @@ export const Works = () => {
 
   return (
     <>
-      <BlockTitle title='portfolio' />
+      <h2 className={s.portfolioTitle}>portfolio</h2>
       <div className={s.wrapper}>
+      
         {userLoggedIn && (
           <div className={s.uploadWrap}>
             <input

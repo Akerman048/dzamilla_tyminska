@@ -32,7 +32,7 @@ export const AlbumPage = () => {
   const { userLoggedIn } = useAuth();
   const { albumName } = useParams();
   const navigate = useNavigate();
-  const [imageUpload, setImageUpload] = useState(null);
+  const [imageUpload, setImageUpload] = useState([]);
   const [photos, setPhotos] = useState([]);
   const [mainPhoto, setMainPhoto] = useState(null);
   const [albumId, setAlbumId] = useState(null);
@@ -42,6 +42,7 @@ export const AlbumPage = () => {
   const [startX, setStartX] = useState(0);
   const [offsetX, setOffsetX] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
+  const [isUploading, setIsUploading] = useState(false);
   const swipeThreshold = 20;
 
   const photosCollectionRef = collection(db, "photos");
@@ -85,24 +86,41 @@ export const AlbumPage = () => {
   }, [albumName, albumsCollectionRef, photosCollectionRef]);
 
   const uploadPhoto = async () => {
-    if (!imageUpload) {
-      alert("Select file!");
+    if (!imageUpload || imageUpload.length === 0) {
+      alert("Select file(s)!");
       return;
     }
 
-    const imageRef = ref(
-      storage,
-      `/dzamilla_tyminska/albums/${albumName}/${imageUpload.name}`
-    );
-    const snapshot = await uploadBytes(imageRef, imageUpload);
-    const url = await getDownloadURL(snapshot.ref);
+    setIsUploading(true);
 
-    await addDoc(photosCollectionRef, {
-      url,
-      album: albumName,
-      createdAt: serverTimestamp(),
-    });
-    setPhotos((prev) => [...prev, { url }]);
+    const uploadedPhotos = [];
+
+    for (const file of imageUpload) {
+      try {
+        const imageRef = ref(
+          storage,
+          `/dzamilla_tyminska/albums/${albumName}/${file.name}`
+        );
+  
+        const snapshot = await uploadBytes(imageRef, file);
+        const url = await getDownloadURL(snapshot.ref);
+  
+        await addDoc(photosCollectionRef, {
+          url,
+          album: albumName,
+          createdAt: serverTimestamp(),
+        });
+  
+        uploadedPhotos.push({ url });
+      } catch (error) {
+        console.error("Upload error:", error);
+        alert("Помилка при завантаженні " + file.name);
+      }
+    }
+  
+    setPhotos((prev) => [...uploadedPhotos, ...prev]);
+    setImageUpload([]);
+    setIsUploading(false);
   };
 
   // Оновлення головного фото
@@ -192,7 +210,7 @@ export const AlbumPage = () => {
   
     requestAnimationFrame(step);
   }, [offsetX]);
-  
+   
 
   const showPrevPhoto = useCallback(() => {
     if (isTransitioning) return;
@@ -378,6 +396,15 @@ export const AlbumPage = () => {
 
   return (
     <>
+    {isUploading && (
+  <div className={s.uploadModal}>
+    <div className={s.uploadModalContent}>
+      <p>Uploading photos...</p>
+      <div className={s.spinner}></div>
+    </div>
+  </div>
+)}
+
       <SideNav sideLines={false} />
       <div className={s.nav}>
         <h2 className={s.name}>
@@ -414,8 +441,8 @@ export const AlbumPage = () => {
         {userLoggedIn && (
           <div className={s.uploadWrap}>
             <input
-              type='file'
-              onChange={(e) => setImageUpload(e.target.files[0])}
+              type='file' multiple
+              onChange={(e) => setImageUpload(Array.from(e.target.files))}
             />
             <button onClick={uploadPhoto}>Add Photo</button>
           </div>

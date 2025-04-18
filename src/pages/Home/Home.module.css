@@ -18,6 +18,10 @@
   height: 100vh;
 }
 
+#about{
+  min-height: 400px;
+}
+
 @media screen and (min-width: 1280px) {
   .container {
     overflow: hidden;
@@ -25,3 +29,16 @@
     scroll-behavior: smooth;
   }
 }
+
+
+@media screen and (width: 820px) and (height: 1180px) {
+  #contacts{
+ margin-top: 120px;
+  }
+ }
+
+ @media screen and (width: 1024px) and (height: 1366px) {
+  #contacts{
+ margin-top: 120px;
+  }
+ }
