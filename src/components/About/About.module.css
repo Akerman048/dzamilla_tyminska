@@ -125,6 +125,34 @@
   word-wrap: break-word;
 }
 
+.tiptap-editor {
+  min-height: 200px;
+  border: 1px solid #ccc;
+  padding: 1rem;
+  border-radius: 4px;
+  background-color: white;
+  color: black;
+  width: 100%;
+}
+
+
+.menu-bar {
+  margin-bottom: 10px;
+}
+
+.menu-bar button {
+  margin-right: 5px;
+  padding: 6px 10px;
+  border: none;
+  background-color: #eee;
+  cursor: pointer;
+}
+
+.menu-bar button.is-active {
+  background-color: #333;
+  color: white;
+}
+
 .textArea {
   max-width: 500px;
   width: 100%;
@@ -230,6 +258,9 @@
   margin-top: 0px;
 }
  
+.textWrap{
+  padding: 0px 10px;
+}
 
   .text {
     font-size: 15px;

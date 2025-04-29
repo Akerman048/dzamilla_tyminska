@@ -50,6 +50,20 @@ input {
   /* padding: 0px 50px; */
 }
 
+.tiptap-editor p {
+  margin: 1em 0;
+  text-indent: 2em;
+}
+
+.tiptap-editor {
+  min-height: 200px;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  border-radius: 4px;
+  background-color: white;
+  color: black;
+  width: 100%;
+}
 
 
 @media screen and (max-width: 900px) {

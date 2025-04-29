@@ -139,6 +139,15 @@
 
 
 @media screen and (max-width:600px) {
+
+  .overlay{
+    gap: 100px;
+  }
+
+  .name{
+    margin-top: 60px;
+  }
+  
   .navLinks li{
     font-size: 22px;
   }
