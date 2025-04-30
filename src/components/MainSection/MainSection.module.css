@@ -229,6 +229,16 @@ input[type="file"] {
     max-width: 40vw;
     left: 50px;
     bottom: -150px;
+    width: 100%;
+  aspect-ratio: 4/3;
+  }
+
+  .homeSideImgWrap img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
   }
 
   .name {
@@ -239,3 +249,4 @@ input[type="file"] {
     max-height: 100vh;
   }
 }
+

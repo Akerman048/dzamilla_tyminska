@@ -425,8 +425,16 @@ input[type="file"] {
 
 
 @media screen and (min-width: 2000px) and (max-height: 1150px) {
- .portfolioTitle{
+ /* .portfolioTitle{
   margin-top: 30px;
- }
+ } */
 
 }
+
+
+@media screen and (min-width: 1285px) and (max-height: 700px) {
+  .wrapper {
+    margin-top: 10px;
+  }
+ 
+ }
