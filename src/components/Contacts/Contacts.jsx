@@ -248,7 +248,7 @@ export const Contacts = () => {
                 }
               />
             ) : (
-              <a className={s.email} href={`${contactData.email}`}>
+              <a className={s.email} href={`mailto:${contactData.email}`}>
                 {contactData.email}
               </a>
             )}
