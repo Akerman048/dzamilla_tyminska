@@ -57,7 +57,7 @@ export const SideNav = ({ activeSection, sideLines }) => {
                 Dżamilla Tymińska{" "}
               </a>
             </h1>
-            <span className={s.subtitle}>creative photography</span>
+            <span className={s.subtitle}>Captured Memories Photography</span>
           </div>
           <ul className={s.navLinks}>
             <li
