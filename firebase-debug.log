@@ -40,3 +40,37 @@
     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
 [error] 
 [error] Error: Failed to get Firebase project dzamillatyminska-a174f. Please make sure the project exists and your account has permission to access it.
+[debug] [2025-05-19T11:00:36.574Z] ----------------------------------------------------------------------
+[debug] [2025-05-19T11:00:36.576Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\akker\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2025-05-19T11:00:36.577Z] CLI Version:   14.2.2
+[debug] [2025-05-19T11:00:36.577Z] Platform:      win32
+[debug] [2025-05-19T11:00:36.577Z] Node Version:  v20.12.2
+[debug] [2025-05-19T11:00:36.577Z] Time:          Mon May 19 2025 11:00:36 GMT+0000 (Greenwich Mean Time)
+[debug] [2025-05-19T11:00:36.577Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-05-19T11:00:36.774Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-05-19T11:00:36.774Z] > authorizing via signed-in user (porazewska.illu@gmail.com)
+[debug] [2025-05-19T11:00:36.774Z] [iam] checking project dzamillatyminska-a174f for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2025-05-19T11:00:36.775Z] Checked if tokens are valid: true, expires at: 1747655794012
+[debug] [2025-05-19T11:00:36.775Z] Checked if tokens are valid: true, expires at: 1747655794012
+[debug] [2025-05-19T11:00:36.776Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/dzamillatyminska-a174f:testIamPermissions [none]
+[debug] [2025-05-19T11:00:36.776Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/dzamillatyminska-a174f:testIamPermissions x-goog-quota-user=projects/dzamillatyminska-a174f
+[debug] [2025-05-19T11:00:36.776Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/dzamillatyminska-a174f:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2025-05-19T11:00:37.715Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/dzamillatyminska-a174f:testIamPermissions 200
+[debug] [2025-05-19T11:00:37.716Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/dzamillatyminska-a174f:testIamPermissions {}
+[debug] [2025-05-19T11:00:37.716Z] [iam] error while checking permissions, command may fail: Authorization failed. This account is missing the following required permissions on project dzamillatyminska-a174f:
+
+  firebase.projects.get
+  firebasehosting.sites.update
+[debug] [2025-05-19T11:00:37.716Z] Checked if tokens are valid: true, expires at: 1747655794012
+[debug] [2025-05-19T11:00:37.716Z] Checked if tokens are valid: true, expires at: 1747655794012
+[debug] [2025-05-19T11:00:37.717Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/dzamillatyminska-a174f [none]
+[debug] [2025-05-19T11:00:38.267Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/dzamillatyminska-a174f 403
+[debug] [2025-05-19T11:00:38.267Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/dzamillatyminska-a174f {"error":{"code":403,"message":"The caller does not have permission","status":"PERMISSION_DENIED"}}
+[debug] [2025-05-19T11:00:38.268Z] Request to https://firebase.googleapis.com/v1beta1/projects/dzamillatyminska-a174f had HTTP Error: 403, The caller does not have permission
+[debug] [2025-05-19T11:00:38.531Z] FirebaseError: Request to https://firebase.googleapis.com/v1beta1/projects/dzamillatyminska-a174f had HTTP Error: 403, The caller does not have permission
+    at responseToError (C:\Users\akker\AppData\Roaming\npm\node_modules\firebase-tools\lib\responseToError.js:52:12)
+    at RetryOperation._fn (C:\Users\akker\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:312:77)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[error] 
+[error] Error: Failed to get Firebase project dzamillatyminska-a174f. Please make sure the project exists and your account has permission to access it.

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import s from "./Contacts.module.css";
 import { BlockTitle } from "../Elements/BlockTitle/BlockTitle";
+import { TiptapEditor } from "../../contexts/TiptapEditor";
+import DOMPurify from "dompurify";
 
 import { Footer } from "../Footer/Footer";
 // import { FaInstagram } from "react-icons/fa";
@@ -202,15 +204,19 @@ export const Contacts = () => {
 
         <div className={s.content}>
           {userLoggedIn ? (
-            <textarea
-              className={s.textArea}
-              value={contactData.paragraph}
-              onChange={(e) =>
-                setContactData({ ...contactData, paragraph: e.target.value })
+            <TiptapEditor
+              content={contactData.paragraph}
+              setContent={(html) =>
+                setContactData({ ...contactData, paragraph: html })
               }
             />
           ) : (
-            <p className={s.text}>{contactData.paragraph}</p>
+            <div
+              className={s.text}
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(contactData.paragraph),
+              }}
+            />
           )}
           <div className={s.telNAddress}>
             {userLoggedIn ? (
