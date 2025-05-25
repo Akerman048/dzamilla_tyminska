@@ -74,3 +74,42 @@
     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
 [error] 
 [error] Error: Failed to get Firebase project dzamillatyminska-a174f. Please make sure the project exists and your account has permission to access it.
+[debug] [2025-05-23T12:15:56.355Z] ----------------------------------------------------------------------
+[debug] [2025-05-23T12:15:56.358Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\akker\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2025-05-23T12:15:56.358Z] CLI Version:   14.2.2
+[debug] [2025-05-23T12:15:56.358Z] Platform:      win32
+[debug] [2025-05-23T12:15:56.358Z] Node Version:  v20.12.2
+[debug] [2025-05-23T12:15:56.358Z] Time:          Fri May 23 2025 12:15:56 GMT+0000 (Greenwich Mean Time)
+[debug] [2025-05-23T12:15:56.358Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-05-23T12:15:56.557Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-05-23T12:15:56.557Z] > authorizing via signed-in user (porazewska.illu@gmail.com)
+[debug] [2025-05-23T12:15:56.557Z] [iam] checking project dzamillatyminska-a174f for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2025-05-23T12:15:56.558Z] Checked if tokens are valid: false, expires at: 1747922256152
+[debug] [2025-05-23T12:15:56.558Z] Checked if tokens are valid: false, expires at: 1747922256152
+[debug] [2025-05-23T12:15:56.559Z] > refreshing access token with scopes: []
+[debug] [2025-05-23T12:15:56.560Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-05-23T12:15:56.560Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-05-23T12:15:57.155Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-05-23T12:15:57.155Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-05-23T12:15:57.162Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/dzamillatyminska-a174f:testIamPermissions [none]
+[debug] [2025-05-23T12:15:57.162Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/dzamillatyminska-a174f:testIamPermissions x-goog-quota-user=projects/dzamillatyminska-a174f
+[debug] [2025-05-23T12:15:57.162Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/dzamillatyminska-a174f:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2025-05-23T12:15:58.366Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/dzamillatyminska-a174f:testIamPermissions 200
+[debug] [2025-05-23T12:15:58.366Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/dzamillatyminska-a174f:testIamPermissions {}
+[debug] [2025-05-23T12:15:58.366Z] [iam] error while checking permissions, command may fail: Authorization failed. This account is missing the following required permissions on project dzamillatyminska-a174f:
+
+  firebase.projects.get
+  firebasehosting.sites.update
+[debug] [2025-05-23T12:15:58.367Z] Checked if tokens are valid: true, expires at: 1748006156156
+[debug] [2025-05-23T12:15:58.367Z] Checked if tokens are valid: true, expires at: 1748006156156
+[debug] [2025-05-23T12:15:58.367Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/dzamillatyminska-a174f [none]
+[debug] [2025-05-23T12:15:59.604Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/dzamillatyminska-a174f 403
+[debug] [2025-05-23T12:15:59.604Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/dzamillatyminska-a174f {"error":{"code":403,"message":"The caller does not have permission","status":"PERMISSION_DENIED"}}
+[debug] [2025-05-23T12:15:59.605Z] Request to https://firebase.googleapis.com/v1beta1/projects/dzamillatyminska-a174f had HTTP Error: 403, The caller does not have permission
+[debug] [2025-05-23T12:15:59.880Z] FirebaseError: Request to https://firebase.googleapis.com/v1beta1/projects/dzamillatyminska-a174f had HTTP Error: 403, The caller does not have permission
+    at responseToError (C:\Users\akker\AppData\Roaming\npm\node_modules\firebase-tools\lib\responseToError.js:52:12)
+    at RetryOperation._fn (C:\Users\akker\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:312:77)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[error] 
+[error] Error: Failed to get Firebase project dzamillatyminska-a174f. Please make sure the project exists and your account has permission to access it.
